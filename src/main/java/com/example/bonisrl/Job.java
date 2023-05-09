@@ -6,16 +6,17 @@ import java.util.Objects;
 
 public class Job {
     String nameType;
-    String firstNameClient;
     String lastNameClient;
-    String firstNameEmployee;
+    String firstNameClient;
     String lastNameEmployee;
+    String firstNameEmployee;
     LocalDate dateOfJob;
     LocalTime hours;
     float size;
     String address;
 
-    public Job(String nameType, String firstNameClient, String lastNameClient, String firstNameEmployee, String lastNameEmployee, LocalDate dateOfJob, LocalTime hours, float size, String address) {
+    public Job(String nameType, String lastNameClient, String firstNameClient, String lastNameEmployee, String firstNameEmployee,
+               LocalDate dateOfJob, LocalTime hours, float size, String address) {
         this.nameType = nameType;
         this.firstNameClient = firstNameClient;
         this.lastNameClient = lastNameClient;

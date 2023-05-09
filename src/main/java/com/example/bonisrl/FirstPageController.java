@@ -169,8 +169,7 @@ public class FirstPageController {
         try {
             Class.forName(JDBC_Driver_MySQL);
             Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-            PreparedStatement statement = c.prepareStatement(   "SELECT T.name, C.lastName, C.firstName, E.lastName, E.firstName, J.dateOfJob, J.hours,  J.size, J.address\n" +
-                                                                    "FROM Job AS J\n" +
+            PreparedStatement statement = c.prepareStatement(   "SELECT T.name, C.lastName AS 'lastNameClient', C.firstName AS 'firstNameClient', E.lastName AS 'lastNameEmployee', E.firstName AS 'firstNameEmployee', J.dateOfJob, J.hours,  J.size, J.address\n" + "FROM Job AS J\n" +
                                                                     "JOIN Client AS C ON (C._id=J.idClient)\n" +
                                                                     "JOIN Employee AS E ON (E._id=J.idEmployee)\n" +
                                                                     "JOIN Type AS T ON (T.name=J.nameType);");
@@ -187,15 +186,15 @@ public class FirstPageController {
             String address;
 
             while (rs.next()) {
-                nameType = rs.getString(1);
-                firstNameClient = rs.getString(2);
-                lastNameClient = rs.getString(3);
-                firstNameEmployee = rs.getString(4);
-                lastNameEmployee = rs.getString(5);
-                dateOfJob = rs.getDate(6).toLocalDate();
-                hours = rs.getTime(7).toLocalTime();
-                size = rs.getInt(8);
-                address = rs.getString(9);
+                nameType = rs.getString("name");
+                lastNameClient = rs.getString("lastNameClient");
+                firstNameClient = rs.getString("firstNameClient");
+                lastNameEmployee = rs.getString("lastNameEmployee");
+                firstNameEmployee = rs.getString("firstNameEmployee");
+                dateOfJob = rs.getDate("dateOfJob").toLocalDate();
+                hours = rs.getTime("hours").toLocalTime();
+                size = rs.getInt("size");
+                address = rs.getString("address");
                 jobs.add(new Job(nameType, firstNameClient, lastNameClient, firstNameEmployee, lastNameEmployee,
                          dateOfJob, hours, size, address));
             }
@@ -206,7 +205,11 @@ public class FirstPageController {
         }
         return jobs;
     }
-        @FXML
+    @FXML
+    void handleAddEmployee(ActionEvent event) {
+
+    }
+    @FXML
     void handleQuit(ActionEvent event) {
         Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
         alert1.setTitle("Logout");

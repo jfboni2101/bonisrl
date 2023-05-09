@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ButtonType?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.control.Label?>
@@ -40,13 +39,11 @@
             <DatePicker fx:id="birthdayDatePicker1" layoutX="160.0" layoutY="262.0" prefHeight="26.0" prefWidth="408.0" />
             <TextField fx:id="lastNameTextField1" layoutX="160.0" layoutY="212.0" prefHeight="26.0" prefWidth="408.0" />
             <TextField fx:id="firstNameTextField1" layoutX="160.0" layoutY="160.0" prefHeight="26.0" prefWidth="408.0" />
-            <ButtonBar layoutX="386.0" layoutY="306.0" prefHeight="40.0" prefWidth="200.0">
-              <buttons>
-                <Button mnemonicParsing="false" onAction="#handleAddEmployee" text="OK" />
-                  <Button mnemonicParsing="false" onAction="#handleCancelOperation" text="CANCEL" />
-              </buttons>
-            </ButtonBar>
          </children>
       </Pane>
    </content>
+   <buttonTypes>
+      <ButtonType fx:constant="CANCEL" />
+      <ButtonType fx:constant="OK" />
+   </buttonTypes>
 </DialogPane>

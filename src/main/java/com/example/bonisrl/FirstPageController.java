@@ -11,12 +11,14 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Optional;
 import java.util.TimeZone;
 import java.sql.*;
 
@@ -98,12 +100,12 @@ public class FirstPageController {
             ResultSet rs = statement.executeQuery();
             String firstname;
             String lastname;
-            String birthday;
+            LocalDate birthday;
 
             while (rs.next()) {
                 lastname = rs.getString("lastName");
                 firstname = rs.getString("firstName");
-                birthday = rs.getString("birthday");
+                birthday = LocalDate.parse(rs.getString("birthday"));
                 persons.add(new Person(lastname, firstname, birthday));
             }
         } catch (SQLException e) {
@@ -124,12 +126,12 @@ public class FirstPageController {
             ResultSet rs = statement.executeQuery();
             String firstname;
             String lastname;
-            String birthday;
+            LocalDate birthday;
 
             while (rs.next()) {
                 lastname = rs.getString("lastName");
                 firstname = rs.getString("firstName");
-                birthday = rs.getString("birthday");
+                birthday = LocalDate.parse(rs.getString("birthday"));
                 persons.add(new Person(lastname, firstname, birthday));
             }
         } catch (SQLException e) {
@@ -207,14 +209,7 @@ public class FirstPageController {
     }
     @FXML
     void handleAddEmployee(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("add-employee.fxml"));
-            DialogPane view = loader.load();
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
     @FXML
     void handleQuit(ActionEvent event) {

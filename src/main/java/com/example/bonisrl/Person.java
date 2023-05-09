@@ -6,9 +6,9 @@ import java.util.Objects;
 public class Person {
     String lastName;
     String firstName;
-    String birthday;
+    LocalDate birthday;
 
-    public Person(String lastName, String firstName, String birthday) {
+    public Person(String lastName, String firstName, LocalDate birthday) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.birthday = birthday;
@@ -17,13 +17,13 @@ public class Person {
     public Person(String lastName, String firstName) {
         this.lastName = lastName;
         this.firstName = firstName;
-        this.birthday = LocalDate.now().toString();
+        this.birthday = LocalDate.now();
     }
 
     public Person() {
         this.lastName = "NULL";
         this.firstName = "NULL";
-        this.birthday = LocalDate.now().toString();
+        this.birthday = LocalDate.now();
     }
 
     public String getLastName() {
@@ -42,11 +42,11 @@ public class Person {
         this.firstName = firstName;
     }
 
-    public String getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(String birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 
@@ -67,6 +67,6 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{" + "lastName='" + lastName + '\'' + ", firstName='" + firstName + '\'' + ", birthday='" + birthday + '\'' + '}';
+        return "Person{" + "lastName='" + lastName + '\'' + ", firstName='" + firstName + '\'' + ", birthday=" + birthday + '}';
     }
 }

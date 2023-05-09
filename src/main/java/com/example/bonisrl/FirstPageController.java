@@ -207,7 +207,14 @@ public class FirstPageController {
     }
     @FXML
     void handleAddEmployee(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("add-employee.fxml"));
+            DialogPane view = loader.load();
 
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     @FXML
     void handleQuit(ActionEvent event) {

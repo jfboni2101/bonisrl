@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.TimeZone;
@@ -48,6 +49,9 @@ public class FirstPageController {
     @FXML private TableColumn<Person, LocalTime> hoursOfJob;
     @FXML private TableColumn<Person, String> typeOfJob;
 
+    @FXML private TableView<TypeOfJob> tableTypeOfJob;
+    @FXML private TableColumn<TypeOfJob, String> nameOfJob;
+    @FXML private TableColumn<TypeOfJob, String> descriptionOfJob;
 
     @FXML
     public void initialize() {
@@ -62,9 +66,9 @@ public class FirstPageController {
         birthdayClient.setCellValueFactory(new PropertyValueFactory<>("birthday"));
         tableClient.setItems(getClientsData());
 
-        lastNameClient.setCellValueFactory(new PropertyValueFactory<>("name"));
-        firstNameClient.setCellValueFactory(new PropertyValueFactory<>("description"));
-        tableClient.setItems(getTypeData());
+        nameOfJob.setCellValueFactory(new PropertyValueFactory<>("name"));
+        descriptionOfJob.setCellValueFactory(new PropertyValueFactory<>("description"));
+        tableTypeOfJob.setItems(getTypeData());
 
     }
 
@@ -101,29 +105,6 @@ public class FirstPageController {
         try {
             Class.forName(JDBC_Driver_MySQL);
             Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-            PreparedStatement statement = c.prepareStatement("SELECT T.* FROM Type AS T");
-
-            ResultSet rs = statement.executeQuery();
-            String name;
-            String description;
-
-            while (rs.next()) {
-                name = rs.getString("name");
-                description = rs.getString("description");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        return persons;
-    }
-
-    public ObservableList<Person> getTypeData() {
-        ObservableList<Person> persons = FXCollections.observableArrayList();
-        try {
-            Class.forName(JDBC_Driver_MySQL);
-            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
             PreparedStatement statement = c.prepareStatement("SELECT C.* FROM Client AS C");
 
             ResultSet rs = statement.executeQuery();
@@ -145,7 +126,31 @@ public class FirstPageController {
         return persons;
     }
 
-    public ObservableList<Person> getjobData() {
+    public ObservableList<TypeOfJob> getTypeData() {
+        ObservableList<TypeOfJob> persons = FXCollections.observableArrayList();
+        try {
+            Class.forName(JDBC_Driver_MySQL);
+            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
+            PreparedStatement statement = c.prepareStatement("SELECT T.* FROM Type AS T");
+
+            ResultSet rs = statement.executeQuery();
+            String name;
+            String description;
+
+            while (rs.next()) {
+                name = rs.getString("name");
+                description = rs.getString("description");
+                persons.add(new TypeOfJob(name, description));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return persons;
+    }
+
+    public ObservableList<Person> getJobData() {
         ObservableList<Person> persons = FXCollections.observableArrayList();
         try {
             Class.forName(JDBC_Driver_MySQL);

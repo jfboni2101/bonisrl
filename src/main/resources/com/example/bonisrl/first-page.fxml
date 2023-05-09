@@ -11,7 +11,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bonisrl.FirstPageController">
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bonisrl.FirstPageController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -45,10 +45,10 @@
                <content>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <center>
-                        <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                        <TableView fx:id="tableEmployee" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER_LEFT">
                           <columns>
-                            <TableColumn fx:id="firstNameEmployee" prefWidth="333.0" text="First Name" />
                             <TableColumn fx:id="lastNameEmployee" prefWidth="333.0" text="Last Name" />
+                            <TableColumn fx:id="firstNameEmployee" prefWidth="333.0" text="First Name" />
                               <TableColumn fx:id="birthdayEmployee" prefWidth="333.0" text="Birthday" />
                           </columns>
                         </TableView>
@@ -67,10 +67,10 @@
                <content>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <center>
-                        <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                        <TableView fx:id="tableClient" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                           <columns>
-                              <TableColumn fx:id="firstNameClient" prefWidth="333.0" text="First Name" />
                               <TableColumn fx:id="lastNameClient" prefWidth="333.0" text="Last Name" />
+                              <TableColumn fx:id="firstNameClient" prefWidth="333.0" text="First Name" />
                               <TableColumn fx:id="birthdayClient" prefWidth="333.0" text="Birthday" />
                           </columns>
                         </TableView>
@@ -89,12 +89,12 @@
                <content>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <center>
-                        <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                        <TableView fx:id="tableJob" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                           <columns>
-                              <TableColumn fx:id="firstNameClientJob" prefWidth="150.0" text="First Name Client" />
                               <TableColumn fx:id="lastNameClientJob" prefWidth="150.0" text="Last Name Client" />
-                              <TableColumn fx:id="firstNameEmployeeJob" minWidth="0.0" prefWidth="150.0" text="First Name Employee" />
-                              <TableColumn fx:id="lastNameEmployeeJob" prefWidth="150.0" text="Last Name Employee" />
+                              <TableColumn fx:id="firstNameClientJob" prefWidth="150.0" text="First Name Client" />
+                              <TableColumn fx:id="lastNameEmployeeJob" minWidth="0.0" prefWidth="150.0" text="Last Name Employee" />
+                              <TableColumn fx:id="firstNameEmployeeJob" prefWidth="150.0" text="First Name Employee" />
                               <TableColumn fx:id="typeOfJob" prefWidth="168.0" text="Type of job" />
                               <TableColumn fx:id="dateOfJob" prefWidth="138.373779296875" text="Date Of Job" />
                               <TableColumn fx:id="hoursOfJob" prefWidth="92.5" text="Hours" />
@@ -107,6 +107,27 @@
                             <Button mnemonicParsing="false" text="Add Job" />
                               <Button mnemonicParsing="false" text="Delete Job" />
                           </buttons>
+                        </ButtonBar>
+                     </bottom>
+                  </BorderPane>
+               </content>
+            </Tab>
+            <Tab text="Type of Job">
+               <content>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <center>
+                        <TableView fx:id="tableTypeOfJob" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER_LEFT">
+                           <columns>
+                              <TableColumn fx:id="nameOfJob" prefWidth="241.55720460414886" text="Name" />
+                              <TableColumn fx:id="descriptionOfJob" prefWidth="756.9999847412109" text="Description" />
+                           </columns>
+                        </TableView>
+                     </center>
+                     <bottom>
+                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                           <buttons>
+                              <Button mnemonicParsing="false" text="Add Employee" />
+                           </buttons>
                         </ButtonBar>
                      </bottom>
                   </BorderPane>

@@ -39,19 +39,22 @@ public class FirstPageController {
     @FXML private TableColumn<Person, String> firstNameClient;
     @FXML private TableColumn<Person, String> birthdayClient;
 
-
-    @FXML private TableView<Person> tableJob;
-    @FXML private TableColumn<Person, String> lastNameClientJob;
-    @FXML private TableColumn<Person, String> firstNameClientJob;
-    @FXML private TableColumn<Person, String> lastNameEmployeeJob;
-    @FXML private TableColumn<Person, String> firstNameEmployeeJob;
-    @FXML private TableColumn<Person, LocalDate> dateOfJob;
-    @FXML private TableColumn<Person, LocalTime> hoursOfJob;
-    @FXML private TableColumn<Person, String> typeOfJob;
-
     @FXML private TableView<TypeOfJob> tableTypeOfJob;
     @FXML private TableColumn<TypeOfJob, String> nameOfJob;
     @FXML private TableColumn<TypeOfJob, String> descriptionOfJob;
+
+    @FXML private TableView<Job> tableJob;
+    @FXML private TableColumn<Job, String> lastNameClientJob;
+    @FXML private TableColumn<Job, String> firstNameClientJob;
+    @FXML private TableColumn<Job, String> lastNameEmployeeJob;
+    @FXML private TableColumn<Job, String> firstNameEmployeeJob;
+    @FXML private TableColumn<Job, LocalDate> dateOfJob;
+    @FXML private TableColumn<Job, LocalTime> hoursOfJob;
+    @FXML private TableColumn<Job, Integer> sizeOfJob;
+    @FXML private TableColumn<Job, Integer> addressOfJob;
+    @FXML private TableColumn<Job, String> typeOfJob;
+
+
 
     @FXML
     public void initialize() {
@@ -69,6 +72,17 @@ public class FirstPageController {
         nameOfJob.setCellValueFactory(new PropertyValueFactory<>("name"));
         descriptionOfJob.setCellValueFactory(new PropertyValueFactory<>("description"));
         tableTypeOfJob.setItems(getTypeData());
+
+        typeOfJob.setCellValueFactory(new PropertyValueFactory<>("nameType"));
+        lastNameClientJob.setCellValueFactory(new PropertyValueFactory<>("lastNameClient"));
+        firstNameClientJob.setCellValueFactory(new PropertyValueFactory<>("firstNameClient"));
+        lastNameEmployeeJob.setCellValueFactory(new PropertyValueFactory<>("lastNameEmployee"));
+        firstNameEmployeeJob.setCellValueFactory(new PropertyValueFactory<>("firstNameEmployee"));
+        dateOfJob.setCellValueFactory(new PropertyValueFactory<>("dateOfJob"));
+        hoursOfJob.setCellValueFactory(new PropertyValueFactory<>("hours"));
+        sizeOfJob.setCellValueFactory(new PropertyValueFactory<>("size"));
+        addressOfJob.setCellValueFactory(new PropertyValueFactory<>("address"));
+        tableJob.setItems(getJobData());
 
     }
 
@@ -127,7 +141,7 @@ public class FirstPageController {
     }
 
     public ObservableList<TypeOfJob> getTypeData() {
-        ObservableList<TypeOfJob> persons = FXCollections.observableArrayList();
+        ObservableList<TypeOfJob> types = FXCollections.observableArrayList();
         try {
             Class.forName(JDBC_Driver_MySQL);
             Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
@@ -140,40 +154,57 @@ public class FirstPageController {
             while (rs.next()) {
                 name = rs.getString("name");
                 description = rs.getString("description");
-                persons.add(new TypeOfJob(name, description));
+                types.add(new TypeOfJob(name, description));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return persons;
+        return types;
     }
 
-    public ObservableList<Person> getJobData() {
-        ObservableList<Person> persons = FXCollections.observableArrayList();
+    public ObservableList<Job> getJobData() {
+        ObservableList<Job> jobs = FXCollections.observableArrayList();
         try {
             Class.forName(JDBC_Driver_MySQL);
             Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-            PreparedStatement statement = c.prepareStatement("SELECT C.* FROM Client AS C");
+            PreparedStatement statement = c.prepareStatement(   "SELECT T.name, C.lastName, C.firstName, E.lastName, E.firstName, J.dateOfJob, J.hours,  J.size, J.address\n" +
+                                                                    "FROM Job AS J\n" +
+                                                                    "JOIN Client AS C ON (C._id=J.idClient)\n" +
+                                                                    "JOIN Employee AS E ON (E._id=J.idEmployee)\n" +
+                                                                    "JOIN Type AS T ON (T.name=J.nameType);");
 
             ResultSet rs = statement.executeQuery();
-            String firstname;
-            String lastname;
-            String birthday;
+            String nameType;
+            String firstNameClient;
+            String lastNameClient;
+            String firstNameEmployee;
+            String lastNameEmployee;
+            LocalDate dateOfJob;
+            LocalTime hours;
+            float size;
+            String address;
 
             while (rs.next()) {
-                lastname = rs.getString("lastName");
-                firstname = rs.getString("firstName");
-                birthday = rs.getString("birthday");
-                persons.add(new Person(lastname, firstname, birthday));
+                nameType = rs.getString(1);
+                firstNameClient = rs.getString(2);
+                lastNameClient = rs.getString(3);
+                firstNameEmployee = rs.getString(4);
+                lastNameEmployee = rs.getString(5);
+                dateOfJob = rs.getDate(6).toLocalDate();
+                hours = rs.getTime(7).toLocalTime();
+                size = rs.getInt(8);
+                address = rs.getString(9);
+                jobs.add(new Job(nameType, firstNameClient, lastNameClient, firstNameEmployee, lastNameEmployee,
+                         dateOfJob, hours, size, address));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return persons;
+        return jobs;
     }
         @FXML
     void handleQuit(ActionEvent event) {

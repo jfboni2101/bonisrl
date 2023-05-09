@@ -85,33 +85,6 @@
                   </BorderPane>
                </content>
           </Tab>
-            <Tab text="Jobs">
-               <content>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0">
-                     <center>
-                        <TableView fx:id="tableJob" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                          <columns>
-                              <TableColumn fx:id="lastNameClientJob" prefWidth="150.0" text="Last Name Client" />
-                              <TableColumn fx:id="firstNameClientJob" prefWidth="150.0" text="First Name Client" />
-                              <TableColumn fx:id="lastNameEmployeeJob" minWidth="0.0" prefWidth="150.0" text="Last Name Employee" />
-                              <TableColumn fx:id="firstNameEmployeeJob" prefWidth="150.0" text="First Name Employee" />
-                              <TableColumn fx:id="typeOfJob" prefWidth="168.0" text="Type of job" />
-                              <TableColumn fx:id="dateOfJob" prefWidth="138.373779296875" text="Date Of Job" />
-                              <TableColumn fx:id="hoursOfJob" prefWidth="92.5" text="Hours" />
-                          </columns>
-                        </TableView>
-                     </center>
-                     <bottom>
-                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                          <buttons>
-                            <Button mnemonicParsing="false" text="Add Job" />
-                              <Button mnemonicParsing="false" text="Delete Job" />
-                          </buttons>
-                        </ButtonBar>
-                     </bottom>
-                  </BorderPane>
-               </content>
-            </Tab>
             <Tab text="Type of Job">
                <content>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
@@ -128,6 +101,35 @@
                            <buttons>
                               <Button mnemonicParsing="false" text="Add Employee" />
                            </buttons>
+                        </ButtonBar>
+                     </bottom>
+                  </BorderPane>
+               </content>
+            </Tab>
+            <Tab text="Jobs">
+               <content>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <center>
+                        <TableView fx:id="tableJob" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                          <columns>
+                              <TableColumn fx:id="typeOfJob" prefWidth="115.0" text="Type of job" />
+                              <TableColumn fx:id="lastNameClientJob" prefWidth="115.0" text="Last Name Client" />
+                              <TableColumn fx:id="firstNameClientJob" prefWidth="115.0" text="First Name Client" />
+                              <TableColumn fx:id="lastNameEmployeeJob" minWidth="0.0" prefWidth="115.0" text="Last Name Employee" />
+                              <TableColumn fx:id="firstNameEmployeeJob" prefWidth="115.0" text="First Name Employee" />
+                              <TableColumn fx:id="dateOfJob" prefWidth="115.0" text="Date Of Job" />
+                              <TableColumn fx:id="hoursOfJob" prefWidth="115.0" text="Hours" />
+                              <TableColumn fx:id="sizeOfJob" prefWidth="79.0" text="Size" />
+                              <TableColumn fx:id="addressOfJob" prefWidth="115.0" text="Addres" />
+                          </columns>
+                        </TableView>
+                     </center>
+                     <bottom>
+                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                          <buttons>
+                            <Button mnemonicParsing="false" text="Add Job" />
+                              <Button mnemonicParsing="false" text="Delete Job" />
+                          </buttons>
                         </ButtonBar>
                      </bottom>
                   </BorderPane>

@@ -1,53 +1,79 @@
 package com.example.bonisrl;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class Person {
-    String lastName;
-    String firstName;
-    LocalDate birthday;
+    StringProperty lastName;
+    StringProperty firstName;
+    ObjectProperty<LocalDate>  birthday;
 
     public Person(String lastName, String firstName, LocalDate birthday) {
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.birthday = birthday;
+        this.lastName = new SimpleStringProperty(lastName);
+        this.firstName = new SimpleStringProperty(firstName);
+        this.birthday = new SimpleObjectProperty<>(birthday);
     }
 
     public Person(String lastName, String firstName) {
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.birthday = LocalDate.now();
+        this.lastName = new SimpleStringProperty(lastName);
+        this.firstName = new SimpleStringProperty(firstName);
+        this.birthday = new SimpleObjectProperty<>(LocalDate.now());
     }
 
     public Person() {
-        this.lastName = "NULL";
-        this.firstName = "NULL";
-        this.birthday = LocalDate.now();
+        this.lastName = new SimpleStringProperty("NULL");
+        this.firstName = new SimpleStringProperty("NULL");
+        this.birthday = new SimpleObjectProperty<>(LocalDate.now());
     }
+
+
+
+
+
 
     public String getLastName() {
-        return lastName;
+        return lastName.get();
+    }
+    public StringProperty lastNameProperty() {
+        return this.lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName.set(lastName);
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+
+
+
+
 
     public String getFirstName() {
+        return firstName.get();
+    }
+    public StringProperty firstNameProperty() {
         return firstName;
     }
-
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstName.set(firstName);
     }
+
+
+
+
+
 
     public LocalDate getBirthday() {
+        return birthday.get();
+    }
+    public ObjectProperty<LocalDate> birthdayProperty() {
         return birthday;
     }
-
     public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
+        this.birthday.set(birthday);
     }
 
     @Override

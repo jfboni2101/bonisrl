@@ -5,17 +5,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Optional;
@@ -36,14 +32,20 @@ public class FirstPageController {
     @FXML private TableColumn<Person, String> firstNameEmployee;
     @FXML private TableColumn<Person, LocalDate> birthdayEmployee;
 
+    private ObservableList<Person> employee;
+
     @FXML private TableView<Person> tableClient;
     @FXML private TableColumn<Person, String> lastNameClient;
     @FXML private TableColumn<Person, String> firstNameClient;
     @FXML private TableColumn<Person, String> birthdayClient;
 
+    private ObservableList<Person> client;
+
     @FXML private TableView<TypeOfJob> tableTypeOfJob;
     @FXML private TableColumn<TypeOfJob, String> nameOfJob;
     @FXML private TableColumn<TypeOfJob, String> descriptionOfJob;
+
+    private ObservableList<TypeOfJob> type;
 
     @FXML private TableView<Job> tableJob;
     @FXML private TableColumn<Job, String> lastNameClientJob;
@@ -56,6 +58,7 @@ public class FirstPageController {
     @FXML private TableColumn<Job, Integer> addressOfJob;
     @FXML private TableColumn<Job, String> typeOfJob;
 
+    private ObservableList<Job> job;
 
 
     @FXML
@@ -91,7 +94,7 @@ public class FirstPageController {
 
 
     public ObservableList<Person> getEmployeeData() {
-        ObservableList<Person> persons = FXCollections.observableArrayList();
+        employee = FXCollections.observableArrayList();
         try {
             Class.forName(JDBC_Driver_MySQL);
             Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
@@ -106,18 +109,18 @@ public class FirstPageController {
                 lastname = rs.getString("lastName");
                 firstname = rs.getString("firstName");
                 birthday = LocalDate.parse(rs.getString("birthday"));
-                persons.add(new Person(lastname, firstname, birthday));
+                employee.add(new Person(lastname, firstname, birthday));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return persons;
+        return employee;
     }
 
     public ObservableList<Person> getClientsData() {
-        ObservableList<Person> persons = FXCollections.observableArrayList();
+        client = FXCollections.observableArrayList();
         try {
             Class.forName(JDBC_Driver_MySQL);
             Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
@@ -132,18 +135,18 @@ public class FirstPageController {
                 lastname = rs.getString("lastName");
                 firstname = rs.getString("firstName");
                 birthday = LocalDate.parse(rs.getString("birthday"));
-                persons.add(new Person(lastname, firstname, birthday));
+                client.add(new Person(lastname, firstname, birthday));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return persons;
+        return client;
     }
 
     public ObservableList<TypeOfJob> getTypeData() {
-        ObservableList<TypeOfJob> types = FXCollections.observableArrayList();
+        type = FXCollections.observableArrayList();
         try {
             Class.forName(JDBC_Driver_MySQL);
             Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
@@ -156,18 +159,18 @@ public class FirstPageController {
             while (rs.next()) {
                 name = rs.getString("name");
                 description = rs.getString("description");
-                types.add(new TypeOfJob(name, description));
+                type.add(new TypeOfJob(name, description));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return types;
+        return type;
     }
 
     public ObservableList<Job> getJobData() {
-        ObservableList<Job> jobs = FXCollections.observableArrayList();
+        job = FXCollections.observableArrayList();
         try {
             Class.forName(JDBC_Driver_MySQL);
             Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
@@ -197,7 +200,7 @@ public class FirstPageController {
                 hours = rs.getTime("hours").toLocalTime();
                 size = rs.getInt("size");
                 address = rs.getString("address");
-                jobs.add(new Job(nameType, firstNameClient, lastNameClient, firstNameEmployee, lastNameEmployee,
+                job.add(new Job(nameType, firstNameClient, lastNameClient, firstNameEmployee, lastNameEmployee,
                          dateOfJob, hours, size, address));
             }
         } catch (SQLException e) {
@@ -205,11 +208,102 @@ public class FirstPageController {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return jobs;
+        return job;
     }
+
     @FXML
     void handleAddEmployee(ActionEvent event) {
+        try {
+            String firstName, lastName;
+            LocalDate birthday;
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("add-employee.fxml"));
+            DialogPane view = loader.load();
+            NewPersonController controller = loader.getController();
 
+            // Set an empty person into the controller
+            controller.setPerson(new Person());
+
+            // Create the dialog
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("New Employee");
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.setDialogPane(view);
+
+            // Show the dialog and wait until the user closes it
+            Optional<ButtonType> clickedButton = dialog.showAndWait();
+            if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+                firstName = controller.getPerson().getFirstName();
+                lastName = controller.getPerson().getLastName();
+                birthday = controller.getPerson().getBirthday();
+                Person newEmployee = controller.getPerson();
+                employee.add(newEmployee);
+                try {
+                    Class.forName(JDBC_Driver_MySQL);
+                    Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
+                    PreparedStatement statement = c.prepareStatement(   "INSERT INTO Employee (lastName, firstName, birthday) " +
+                                                                            "VALUES (?,?,?);");
+                    statement.setString(1, lastName);
+                    statement.setString(2, firstName);
+                    statement.setString(3, String.valueOf(birthday));
+                    statement.executeUpdate();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void handleAddClient(ActionEvent event) {
+        try {
+            String firstName, lastName;
+            LocalDate birthday;
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("add-client.fxml"));
+            DialogPane view = loader.load();
+            NewPersonController controller = loader.getController();
+
+            // Set an empty person into the controller
+            controller.setPerson(new Person());
+
+            // Create the dialog
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("New Employee");
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.setDialogPane(view);
+
+            // Show the dialog and wait until the user closes it
+            Optional<ButtonType> clickedButton = dialog.showAndWait();
+            if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+                firstName = controller.getPerson().getFirstName();
+                lastName = controller.getPerson().getLastName();
+                birthday = controller.getPerson().getBirthday();
+                Person newEmployee = controller.getPerson();
+                client.add(newEmployee);
+                try {
+                    Class.forName(JDBC_Driver_MySQL);
+                    Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
+                    PreparedStatement statement = c.prepareStatement(   "INSERT INTO Client (lastName, firstName, " +
+                            "birthday) " +
+                            "VALUES (?,?,?);");
+                    statement.setString(1, lastName);
+                    statement.setString(2, firstName);
+                    statement.setString(3, String.valueOf(birthday));
+                    statement.executeUpdate();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     @FXML
     void handleQuit(ActionEvent event) {

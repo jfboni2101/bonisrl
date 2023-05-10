@@ -78,7 +78,7 @@
                      <bottom>
                         <ButtonBar prefHeight="40.0" prefWidth="953.0" BorderPane.alignment="CENTER">
                           <buttons>
-                              <Button mnemonicParsing="false" text="Add Client" />
+                              <Button mnemonicParsing="false" onAction="#handleAddClient" text="Add Client" />
                           </buttons>
                         </ButtonBar>
                      </bottom>

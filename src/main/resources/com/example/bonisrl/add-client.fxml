@@ -10,13 +10,13 @@
 <?import javafx.scene.text.Font?>
 
 <DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bonisrl.NewPersonController">
-    <expandableContent>
+   <expandableContent>
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0" />
-    </expandableContent>
+   </expandableContent>
    <content>
       <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
          <children>
-            <Label layoutX="78.0" layoutY="45.0" text="Add an employee">
+            <Label layoutX="150.0" layoutY="51.0" text="Add a client">
                <font>
                   <Font name="Apple Braille" size="56.0" />
                </font>

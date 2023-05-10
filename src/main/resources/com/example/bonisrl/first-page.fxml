@@ -17,8 +17,9 @@
         <menus>
           <Menu mnemonicParsing="false" text="Operations">
             <items>
-              <MenuItem mnemonicParsing="false" text="Add Employee" />
-                  <MenuItem mnemonicParsing="false" text="Add Client" />
+              <MenuItem mnemonicParsing="false" onAction="#handleAddEmployee" text="Add Employee" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleAddClient" text="Add Client" />
+                  <MenuItem mnemonicParsing="false" text="Add Type of Job" />
                   <MenuItem mnemonicParsing="false" text="Add Job" />
                   <MenuItem mnemonicParsing="false" onAction="#handleQuit" text="Quit" />
             </items>
@@ -99,7 +100,7 @@
                      <bottom>
                         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                            <buttons>
-                              <Button mnemonicParsing="false" text="Add Employee" />
+                              <Button mnemonicParsing="false" onAction="#handleAddType" text="Add Type Of Job" />
                            </buttons>
                         </ButtonBar>
                      </bottom>

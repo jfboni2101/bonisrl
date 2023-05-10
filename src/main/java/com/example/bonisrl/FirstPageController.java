@@ -257,7 +257,6 @@ public class FirstPageController {
             e.printStackTrace();
         }
     }
-
     @FXML
     void handleAddClient(ActionEvent event) {
         try {
@@ -273,7 +272,7 @@ public class FirstPageController {
 
             // Create the dialog
             Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setTitle("New Employee");
+            dialog.setTitle("New Client");
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.setDialogPane(view);
 
@@ -283,8 +282,8 @@ public class FirstPageController {
                 firstName = controller.getPerson().getFirstName();
                 lastName = controller.getPerson().getLastName();
                 birthday = controller.getPerson().getBirthday();
-                Person newEmployee = controller.getPerson();
-                client.add(newEmployee);
+                Person newClient = controller.getPerson();
+                client.add(newClient);
                 try {
                     Class.forName(JDBC_Driver_MySQL);
                     Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
@@ -294,6 +293,48 @@ public class FirstPageController {
                     statement.setString(1, lastName);
                     statement.setString(2, firstName);
                     statement.setString(3, String.valueOf(birthday));
+                    statement.executeUpdate();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    void handleAddType(ActionEvent event) {
+        try {
+            String name, description;
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("add-type.fxml"));
+            DialogPane view = loader.load();
+            NewTypeController controller = loader.getController();
+
+            // Set an empty person into the controller
+            controller.set(new TypeOfJob());
+
+            // Create the dialog
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("New Type Of Job");
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.setDialogPane(view);
+
+            // Show the dialog and wait until the user closes it
+            Optional<ButtonType> clickedButton = dialog.showAndWait();
+            if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+                name = controller.getType().getName();
+                description = controller.getType().getDescription();
+                TypeOfJob newType = controller.getType();
+                type.add(newType);
+                try {
+                    Class.forName(JDBC_Driver_MySQL);
+                    Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
+                    PreparedStatement statement = c.prepareStatement(   "INSERT INTO Type (name, description) VALUES (?,?);");
+                    statement.setString(1, name);
+                    statement.setString(2, description);
                     statement.executeUpdate();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);

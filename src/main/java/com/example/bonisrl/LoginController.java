@@ -19,8 +19,6 @@ public class LoginController {
     @FXML private TextField usernameTextField;
     @FXML private Label provaLabel;
 
-    //String username = "jfboni";
-    //String password = "Magamago2101!";
     public static final String JDBC_Driver_MySQL = "com.mysql.cj.jdbc.Driver";
     public static final String JDBC_URL_MySQL = "jdbc:mysql://localhost:3306/boni_srl?user=boniSrl&password" +
             "=Magamago2101!" + "&serverTimezone=" + TimeZone.getDefault().getID();

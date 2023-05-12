@@ -63,7 +63,6 @@ public class FirstPageController {
 
     private ObservableList<Job> job;
 
-
     @FXML
     public void initialize() {
 
@@ -94,8 +93,6 @@ public class FirstPageController {
 
     }
 
-
-
     public ObservableList<Person> getEmployeeData() {
         employee = FXCollections.observableArrayList();
         try {
@@ -121,7 +118,6 @@ public class FirstPageController {
         }
         return employee;
     }
-
     public ObservableList<Person> getClientsData() {
         client = FXCollections.observableArrayList();
         try {
@@ -147,7 +143,6 @@ public class FirstPageController {
         }
         return client;
     }
-
     public ObservableList<TypeOfJob> getTypeData() {
         type = FXCollections.observableArrayList();
         try {
@@ -171,7 +166,6 @@ public class FirstPageController {
         }
         return type;
     }
-
     public ObservableList<Job> getJobData() {
         job = FXCollections.observableArrayList();
         try {

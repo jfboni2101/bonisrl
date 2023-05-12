@@ -6,7 +6,7 @@ import javafx.scene.control.*;
 public class NewTypeController {
 
     @FXML private TextField nameTextField;
-    @FXML private TextField descriptionTextField;
+    @FXML private TextArea descriptionTextField;
     TypeOfJob type;
 
     @FXML
@@ -14,7 +14,6 @@ public class NewTypeController {
         nameTextField.textProperty().addListener((observable, oldValue, newValue) -> type.nameProperty().set(newValue));
         descriptionTextField.textProperty().addListener((observable, oldValue, newValue) -> type.descriptionProperty().set(newValue));
     }
-
 
     void update() {
         nameTextField.textProperty().set(type.getName());

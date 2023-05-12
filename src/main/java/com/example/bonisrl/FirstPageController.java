@@ -234,19 +234,12 @@ public class FirstPageController {
                     lastName = controller.getPerson().getLastName();
                     birthday = controller.getPerson().getBirthday();
                     //Control about the inserted variables
-                    if (firstName == "NULL" || lastName == "NULL" || LocalDate.now().getYear() - birthday.getYear() < 18 || (LocalDate.now().getYear() - birthday.getYear() == 18 && LocalDate.now().getMonth().compareTo(birthday.getMonth()) < 0) || (LocalDate.now().getYear() - birthday.getYear() == 18 && LocalDate.now().getDayOfYear() - birthday.getDayOfYear() < 0)) {
+                    if (firstName.equals("NULL") || lastName.equals("NULL") || LocalDate.now().getYear() - birthday.getYear() < 18 || (LocalDate.now().getYear() - birthday.getYear() == 18 && LocalDate.now().getMonth().compareTo(birthday.getMonth()) < 0) || (LocalDate.now().getYear() - birthday.getYear() == 18 && LocalDate.now().getDayOfYear() - birthday.getDayOfYear() < 0)) {
                         Alert alert2 = new Alert(Alert.AlertType.ERROR);
                         alert2.setTitle("Inserimento non corretto!");
                         alert2.setHeaderText("Inserimento non corretto");
                         alert2.setContentText("Hai sbagliato a scrivere il nome o il cognome o la data non è da maggiorenne");
-                        alert2.showAndWait().ifPresent(response -> {
-                            if (response == ButtonType.OK) {
-
-                            } else {
-
-                            }
-                        });
-                        continue;
+                        alert2.showAndWait();
                     } else {
                         Person newEmployee = controller.getPerson();
                         employee.add(newEmployee);
@@ -261,9 +254,17 @@ public class FirstPageController {
                             statement.executeUpdate();
                             break;
                         } catch (SQLException e) {
-                            throw new RuntimeException(e);
+                            Alert alert3 = new Alert(Alert.AlertType.ERROR);
+                            alert3.setTitle("ERRORE!");
+                            alert3.setHeaderText("Errore SQL");
+                            alert3.setContentText("C'è stato un errore nell'SQL");
+                            alert3.showAndWait();
                         } catch (ClassNotFoundException e) {
-                            throw new RuntimeException(e);
+                            Alert alert4 = new Alert(Alert.AlertType.ERROR);
+                            alert4.setTitle("ERRORE!");
+                            alert4.setHeaderText("Errore nella creazione Class.forName()");
+                            alert4.setContentText("C'è stato un errore nella creazione di Class.forName()");
+                            alert4.showAndWait();
                         }
                     }
                 } else {
@@ -300,19 +301,12 @@ public class FirstPageController {
                     lastName = controller.getPerson().getLastName();
                     birthday = controller.getPerson().getBirthday();
                     //Control about the inserted variables
-                    if (firstName == "NULL" || lastName == "NULL" || LocalDate.now().getYear() - birthday.getYear() < 18 || (LocalDate.now().getYear() - birthday.getYear() == 18 && LocalDate.now().getMonth().compareTo(birthday.getMonth()) < 0) || (LocalDate.now().getYear() - birthday.getYear() == 18 && LocalDate.now().getDayOfYear() - birthday.getDayOfYear() < 0)) {
+                    if (firstName.equals("NULL") || lastName.equals("NULL") || LocalDate.now().getYear() - birthday.getYear() < 18 || (LocalDate.now().getYear() - birthday.getYear() == 18 && LocalDate.now().getMonth().compareTo(birthday.getMonth()) < 0) || (LocalDate.now().getYear() - birthday.getYear() == 18 && LocalDate.now().getDayOfYear() - birthday.getDayOfYear() < 0)) {
                         Alert alert2 = new Alert(Alert.AlertType.ERROR);
                         alert2.setTitle("Inserimento non corretto!");
                         alert2.setHeaderText("Inserimento non corretto");
                         alert2.setContentText("Hai sbagliato a scrivere il nome o il cognome o la data non è da maggiorenne");
-                        alert2.showAndWait().ifPresent(response -> {
-                            if (response == ButtonType.OK) {
-
-                            } else {
-
-                            }
-                        });
-                        continue;
+                        alert2.showAndWait();
                     } else {
                         Person newClient = controller.getPerson();
                         client.add(newClient);
@@ -327,9 +321,17 @@ public class FirstPageController {
                             statement.executeUpdate();
                             break;
                         } catch (SQLException e) {
-                            throw new RuntimeException(e);
+                            Alert alert3 = new Alert(Alert.AlertType.ERROR);
+                            alert3.setTitle("ERRORE!");
+                            alert3.setHeaderText("Errore SQL");
+                            alert3.setContentText("C'è stato un errore nell'SQL");
+                            alert3.showAndWait();
                         } catch (ClassNotFoundException e) {
-                            throw new RuntimeException(e);
+                            Alert alert4 = new Alert(Alert.AlertType.ERROR);
+                            alert4.setTitle("ERRORE!");
+                            alert4.setHeaderText("Errore nella creazione Class.forName()");
+                            alert4.setContentText("C'è stato un errore nella creazione di Class.forName()");
+                            alert4.showAndWait();
                         }
                     }
                 } else {
@@ -364,19 +366,12 @@ public class FirstPageController {
                     name = controller.getType().getName();
                     description = controller.getType().getDescription();
                     //Control about the inserted variables
-                    if (name == "") {
+                    if (name.equals("")) {
                         Alert alert2 = new Alert(Alert.AlertType.ERROR);
                         alert2.setTitle("Inserimento non corretto!");
                         alert2.setHeaderText("Inserimento non corretto");
                         alert2.setContentText("Hai sbagliato a scrivere il nome del tipo di lavoro");
-                        alert2.showAndWait().ifPresent(response -> {
-                            if (response == ButtonType.OK) {
-
-                            } else {
-
-                            }
-                        });
-                        continue;
+                        alert2.showAndWait();
                     } else {
                         TypeOfJob newType = controller.getType();
                         type.add(newType);
@@ -391,9 +386,17 @@ public class FirstPageController {
                             statement.executeUpdate();
                             break;
                         } catch (SQLException e) {
-                            throw new RuntimeException(e);
+                            Alert alert3 = new Alert(Alert.AlertType.ERROR);
+                            alert3.setTitle("ERRORE!");
+                            alert3.setHeaderText("Errore SQL");
+                            alert3.setContentText("C'è stato un errore nell'SQL");
+                            alert3.showAndWait();
                         } catch (ClassNotFoundException e) {
-                            throw new RuntimeException(e);
+                            Alert alert4 = new Alert(Alert.AlertType.ERROR);
+                            alert4.setTitle("ERRORE!");
+                            alert4.setHeaderText("Errore nella creazione Class.forName()");
+                            alert4.setContentText("C'è stato un errore nella creazione di Class.forName()");
+                            alert4.showAndWait();
                         }
                     }
                 } else {

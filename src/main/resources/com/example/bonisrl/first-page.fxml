@@ -19,7 +19,7 @@
             <items>
               <MenuItem mnemonicParsing="false" onAction="#handleAddEmployee" text="Add Employee" />
                   <MenuItem mnemonicParsing="false" onAction="#handleAddClient" text="Add Client" />
-                  <MenuItem mnemonicParsing="false" text="Add Type of Job" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleAddType" text="Add Type of Job" />
                   <MenuItem mnemonicParsing="false" text="Add Job" />
                   <MenuItem mnemonicParsing="false" onAction="#handleQuit" text="Quit" />
             </items>
@@ -52,6 +52,9 @@
                             <TableColumn fx:id="firstNameEmployee" prefWidth="333.0" text="First Name" />
                               <TableColumn fx:id="birthdayEmployee" prefWidth="333.0" text="Birthday" />
                           </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
                         </TableView>
                      </center>
                      <bottom>
@@ -74,6 +77,9 @@
                               <TableColumn fx:id="firstNameClient" prefWidth="333.0" text="First Name" />
                               <TableColumn fx:id="birthdayClient" prefWidth="333.0" text="Birthday" />
                           </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
                         </TableView>
                      </center>
                      <bottom>
@@ -95,6 +101,9 @@
                               <TableColumn fx:id="nameOfJob" prefWidth="241.55720460414886" text="Name" />
                               <TableColumn fx:id="descriptionOfJob" prefWidth="756.9999847412109" text="Description" />
                            </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
                         </TableView>
                      </center>
                      <bottom>
@@ -123,6 +132,9 @@
                               <TableColumn fx:id="sizeOfJob" prefWidth="79.0" text="Size" />
                               <TableColumn fx:id="addressOfJob" prefWidth="115.0" text="Addres" />
                           </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
                         </TableView>
                      </center>
                      <bottom>

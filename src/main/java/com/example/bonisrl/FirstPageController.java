@@ -5,9 +5,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -22,6 +25,7 @@ public class FirstPageController {
     public static final String JDBC_Driver_MySQL = "com.mysql.cj.jdbc.Driver";
     public static final String JDBC_URL_MySQL = "jdbc:mysql://localhost:3306/boni_srl?user=boniSrl&password" +
             "=Magamago2101!" + "&serverTimezone=" + TimeZone.getDefault().getID();
+
 
     @FXML private BorderPane root;
 
@@ -222,34 +226,54 @@ public class FirstPageController {
 
             // Set an empty person into the controller
             controller.setPerson(new Person());
+            while(true) {
+            // Create the dialog to add an Employee
+                Dialog<ButtonType> dialog = new Dialog<>();
+                dialog.setTitle("New Employee");
+                dialog.initModality(Modality.WINDOW_MODAL);
+                dialog.setDialogPane(view);
 
-            // Create the dialog
-            Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setTitle("New Employee");
-            dialog.initModality(Modality.WINDOW_MODAL);
-            dialog.setDialogPane(view);
+                // Show the dialog and wait until the user closes it
+                Optional<ButtonType> clickedButton = dialog.showAndWait();
+                if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+                    firstName = controller.getPerson().getFirstName();
+                    lastName = controller.getPerson().getLastName();
+                    birthday = controller.getPerson().getBirthday();
+                    //Control about the inserted variables
+                    if (firstName == "NULL" || lastName == "NULL" || LocalDate.now().getYear() - birthday.getYear() < 18 || (LocalDate.now().getYear() - birthday.getYear() == 18 && LocalDate.now().getMonth().compareTo(birthday.getMonth()) < 0) || (LocalDate.now().getYear() - birthday.getYear() == 18 && LocalDate.now().getDayOfYear() - birthday.getDayOfYear() < 0)) {
+                        Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                        alert2.setTitle("Inserimento non corretto!");
+                        alert2.setHeaderText("Inserimento non corretto");
+                        alert2.setContentText("Hai sbagliato a scrivere il nome o il cognome o la data non è da maggiorenne");
+                        alert2.showAndWait().ifPresent(response -> {
+                            if (response == ButtonType.OK) {
 
-            // Show the dialog and wait until the user closes it
-            Optional<ButtonType> clickedButton = dialog.showAndWait();
-            if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
-                firstName = controller.getPerson().getFirstName();
-                lastName = controller.getPerson().getLastName();
-                birthday = controller.getPerson().getBirthday();
-                Person newEmployee = controller.getPerson();
-                employee.add(newEmployee);
-                try {
-                    Class.forName(JDBC_Driver_MySQL);
-                    Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-                    PreparedStatement statement = c.prepareStatement(   "INSERT INTO Employee (lastName, firstName, birthday) " +
-                                                                            "VALUES (?,?,?);");
-                    statement.setString(1, lastName);
-                    statement.setString(2, firstName);
-                    statement.setString(3, String.valueOf(birthday));
-                    statement.executeUpdate();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                } catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
+                            } else {
+
+                            }
+                        });
+                        continue;
+                    } else {
+                        Person newEmployee = controller.getPerson();
+                        employee.add(newEmployee);
+                        //Add the new Employee
+                        try {
+                            Class.forName(JDBC_Driver_MySQL);
+                            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
+                            PreparedStatement statement = c.prepareStatement("INSERT INTO Employee (lastName, firstName, birthday) " + "VALUES (?,?,?);");
+                            statement.setString(1, lastName);
+                            statement.setString(2, firstName);
+                            statement.setString(3, String.valueOf(birthday));
+                            statement.executeUpdate();
+                            break;
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        } catch (ClassNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                } else {
+                    break;
                 }
             }
         } catch (IOException e) {
@@ -268,35 +292,54 @@ public class FirstPageController {
 
             // Set an empty person into the controller
             controller.setPerson(new Person());
+            while(true) {
+                // Create the dialog to add an Employee
+                Dialog<ButtonType> dialog = new Dialog<>();
+                dialog.setTitle("New Client");
+                dialog.initModality(Modality.WINDOW_MODAL);
+                dialog.setDialogPane(view);
 
-            // Create the dialog
-            Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setTitle("New Client");
-            dialog.initModality(Modality.WINDOW_MODAL);
-            dialog.setDialogPane(view);
+                // Show the dialog and wait until the user closes it
+                Optional<ButtonType> clickedButton = dialog.showAndWait();
+                if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+                    firstName = controller.getPerson().getFirstName();
+                    lastName = controller.getPerson().getLastName();
+                    birthday = controller.getPerson().getBirthday();
+                    //Control about the inserted variables
+                    if (firstName == "NULL" || lastName == "NULL" || LocalDate.now().getYear() - birthday.getYear() < 18 || (LocalDate.now().getYear() - birthday.getYear() == 18 && LocalDate.now().getMonth().compareTo(birthday.getMonth()) < 0) || (LocalDate.now().getYear() - birthday.getYear() == 18 && LocalDate.now().getDayOfYear() - birthday.getDayOfYear() < 0)) {
+                        Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                        alert2.setTitle("Inserimento non corretto!");
+                        alert2.setHeaderText("Inserimento non corretto");
+                        alert2.setContentText("Hai sbagliato a scrivere il nome o il cognome o la data non è da maggiorenne");
+                        alert2.showAndWait().ifPresent(response -> {
+                            if (response == ButtonType.OK) {
 
-            // Show the dialog and wait until the user closes it
-            Optional<ButtonType> clickedButton = dialog.showAndWait();
-            if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
-                firstName = controller.getPerson().getFirstName();
-                lastName = controller.getPerson().getLastName();
-                birthday = controller.getPerson().getBirthday();
-                Person newClient = controller.getPerson();
-                client.add(newClient);
-                try {
-                    Class.forName(JDBC_Driver_MySQL);
-                    Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-                    PreparedStatement statement = c.prepareStatement(   "INSERT INTO Client (lastName, firstName, " +
-                            "birthday) " +
-                            "VALUES (?,?,?);");
-                    statement.setString(1, lastName);
-                    statement.setString(2, firstName);
-                    statement.setString(3, String.valueOf(birthday));
-                    statement.executeUpdate();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                } catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
+                            } else {
+
+                            }
+                        });
+                        continue;
+                    } else {
+                        Person newClient = controller.getPerson();
+                        client.add(newClient);
+                        //Add the new Employee
+                        try {
+                            Class.forName(JDBC_Driver_MySQL);
+                            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
+                            PreparedStatement statement = c.prepareStatement("INSERT INTO Client (lastName, firstName, birthday) " + "VALUES (?,?,?);");
+                            statement.setString(1, lastName);
+                            statement.setString(2, firstName);
+                            statement.setString(3, String.valueOf(birthday));
+                            statement.executeUpdate();
+                            break;
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        } catch (ClassNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                } else {
+                    break;
                 }
             }
         } catch (IOException e) {
@@ -314,31 +357,53 @@ public class FirstPageController {
 
             // Set an empty person into the controller
             controller.set(new TypeOfJob());
+            while(true) {
+                // Create the dialog to add an Employee
+                Dialog<ButtonType> dialog = new Dialog<>();
+                dialog.setTitle("New Type Of Job");
+                dialog.initModality(Modality.WINDOW_MODAL);
+                dialog.setDialogPane(view);
 
-            // Create the dialog
-            Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setTitle("New Type Of Job");
-            dialog.initModality(Modality.WINDOW_MODAL);
-            dialog.setDialogPane(view);
+                // Show the dialog and wait until the user closes it
+                Optional<ButtonType> clickedButton = dialog.showAndWait();
+                if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+                    name = controller.getType().getName();
+                    description = controller.getType().getDescription();
+                    //Control about the inserted variables
+                    if (name == "") {
+                        Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                        alert2.setTitle("Inserimento non corretto!");
+                        alert2.setHeaderText("Inserimento non corretto");
+                        alert2.setContentText("Hai sbagliato a scrivere il nome del tipo di lavoro");
+                        alert2.showAndWait().ifPresent(response -> {
+                            if (response == ButtonType.OK) {
 
-            // Show the dialog and wait until the user closes it
-            Optional<ButtonType> clickedButton = dialog.showAndWait();
-            if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
-                name = controller.getType().getName();
-                description = controller.getType().getDescription();
-                TypeOfJob newType = controller.getType();
-                type.add(newType);
-                try {
-                    Class.forName(JDBC_Driver_MySQL);
-                    Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-                    PreparedStatement statement = c.prepareStatement(   "INSERT INTO Type (name, description) VALUES (?,?);");
-                    statement.setString(1, name);
-                    statement.setString(2, description);
-                    statement.executeUpdate();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                } catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
+                            } else {
+
+                            }
+                        });
+                        continue;
+                    } else {
+                        TypeOfJob newType = controller.getType();
+                        type.add(newType);
+                        //Add the new Employee
+                        try {
+                            Class.forName(JDBC_Driver_MySQL);
+                            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
+                            PreparedStatement statement = c.prepareStatement("INSERT INTO Client (name, description)" +
+                                    "VALUES (?,?);");
+                            statement.setString(1, name);
+                            statement.setString(2, description);
+                            statement.executeUpdate();
+                            break;
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        } catch (ClassNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                } else {
+                    break;
                 }
             }
         } catch (IOException e) {
@@ -361,3 +426,5 @@ public class FirstPageController {
         });
     }
 }
+
+

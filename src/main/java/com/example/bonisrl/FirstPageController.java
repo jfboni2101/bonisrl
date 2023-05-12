@@ -112,9 +112,17 @@ public class FirstPageController {
                 employee.add(new Person(lastname, firstname, birthday));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Alert alert3 = new Alert(Alert.AlertType.ERROR);
+            alert3.setTitle("ERRORE!");
+            alert3.setHeaderText("Errore SQL");
+            alert3.setContentText("C'è stato un errore nell'SQL");
+            alert3.showAndWait();
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            Alert alert4 = new Alert(Alert.AlertType.ERROR);
+            alert4.setTitle("ERRORE!");
+            alert4.setHeaderText("Errore nella creazione Class.forName()");
+            alert4.setContentText("C'è stato un errore nella creazione di Class.forName()");
+            alert4.showAndWait();
         }
         return employee;
     }
@@ -137,9 +145,17 @@ public class FirstPageController {
                 client.add(new Person(lastname, firstname, birthday));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Alert alert3 = new Alert(Alert.AlertType.ERROR);
+            alert3.setTitle("ERRORE!");
+            alert3.setHeaderText("Errore SQL");
+            alert3.setContentText("C'è stato un errore nell'SQL");
+            alert3.showAndWait();
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            Alert alert4 = new Alert(Alert.AlertType.ERROR);
+            alert4.setTitle("ERRORE!");
+            alert4.setHeaderText("Errore nella creazione Class.forName()");
+            alert4.setContentText("C'è stato un errore nella creazione di Class.forName()");
+            alert4.showAndWait();
         }
         return client;
     }
@@ -160,9 +176,17 @@ public class FirstPageController {
                 type.add(new TypeOfJob(name, description));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Alert alert3 = new Alert(Alert.AlertType.ERROR);
+            alert3.setTitle("ERRORE!");
+            alert3.setHeaderText("Errore SQL");
+            alert3.setContentText("C'è stato un errore nell'SQL");
+            alert3.showAndWait();
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            Alert alert4 = new Alert(Alert.AlertType.ERROR);
+            alert4.setTitle("ERRORE!");
+            alert4.setHeaderText("Errore nella creazione Class.forName()");
+            alert4.setContentText("C'è stato un errore nella creazione di Class.forName()");
+            alert4.showAndWait();
         }
         return type;
     }
@@ -201,9 +225,17 @@ public class FirstPageController {
                          dateOfJob, hours, size, address));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Alert alert3 = new Alert(Alert.AlertType.ERROR);
+            alert3.setTitle("ERRORE!");
+            alert3.setHeaderText("Errore SQL");
+            alert3.setContentText("C'è stato un errore nell'SQL");
+            alert3.showAndWait();
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            Alert alert4 = new Alert(Alert.AlertType.ERROR);
+            alert4.setTitle("ERRORE!");
+            alert4.setHeaderText("Errore nella creazione Class.forName()");
+            alert4.setContentText("C'è stato un errore nella creazione di Class.forName()");
+            alert4.showAndWait();
         }
         return job;
     }
@@ -247,7 +279,7 @@ public class FirstPageController {
                         try {
                             Class.forName(JDBC_Driver_MySQL);
                             Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-                            PreparedStatement statement = c.prepareStatement("INSERT INTO Employee (lastName, firstName, birthday) " + "VALUES (?,?,?);");
+                            PreparedStatement statement = c.prepareStatement("INSERT INTO Employee (lastName, firstName, birthday) VALUES (?,?,?);");
                             statement.setString(1, lastName);
                             statement.setString(2, firstName);
                             statement.setString(3, String.valueOf(birthday));
@@ -314,7 +346,7 @@ public class FirstPageController {
                         try {
                             Class.forName(JDBC_Driver_MySQL);
                             Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-                            PreparedStatement statement = c.prepareStatement("INSERT INTO Client (lastName, firstName, birthday) " + "VALUES (?,?,?);");
+                            PreparedStatement statement = c.prepareStatement("INSERT INTO Client (lastName, firstName, birthday) VALUES (?,?,?);");
                             statement.setString(1, lastName);
                             statement.setString(2, firstName);
                             statement.setString(3, String.valueOf(birthday));
@@ -379,8 +411,7 @@ public class FirstPageController {
                         try {
                             Class.forName(JDBC_Driver_MySQL);
                             Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-                            PreparedStatement statement = c.prepareStatement("INSERT INTO Type (name, description)" +
-                                    "VALUES (?,?);");
+                            PreparedStatement statement = c.prepareStatement("INSERT INTO Type (name, description) VALUES (?,?);");
                             statement.setString(1, name);
                             statement.setString(2, description);
                             statement.executeUpdate();
@@ -417,8 +448,6 @@ public class FirstPageController {
             if (response == ButtonType.OK) {
                 Stage stage = (Stage) root.getScene().getWindow();
                 stage.close();
-            } else {
-
             }
         });
     }

@@ -390,7 +390,7 @@ public class FirstPageController {
                         try {
                             Class.forName(JDBC_Driver_MySQL);
                             Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-                            PreparedStatement statement = c.prepareStatement("INSERT INTO Client (name, description)" +
+                            PreparedStatement statement = c.prepareStatement("INSERT INTO Type (name, description)" +
                                     "VALUES (?,?);");
                             statement.setString(1, name);
                             statement.setString(2, description);

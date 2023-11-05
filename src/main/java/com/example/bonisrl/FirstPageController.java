@@ -210,7 +210,7 @@ public class FirstPageController {
             String firstNameEmployee;
             String lastNameEmployee;
             LocalDate dateOfJob;
-            LocalTime hours;
+            Float hours;
             Float size;
             String address;
 
@@ -223,7 +223,7 @@ public class FirstPageController {
                 firstNameEmployee = rs.getString("firstNameEmployee");
                 lastNameEmployee = rs.getString("lastNameEmployee");
                 dateOfJob = rs.getDate("dateOfJob").toLocalDate();
-                hours = rs.getTime("hours").toLocalTime();
+                hours = rs.getFloat("hours");
                 size = rs.getFloat("size");
                 address = rs.getString("address");
                 job.add(new Job(nameType, idClient, firstNameClient, lastNameClient, idEmployee, firstNameEmployee, lastNameEmployee, dateOfJob, hours,
@@ -448,9 +448,8 @@ public class FirstPageController {
         try {
             String name, address;
             Integer idClient, idEmployee;
-            Float size;
+            Float size, hours;
             LocalDate dateOfJob;
-            LocalTime hours;
 
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("add-job.fxml"));
@@ -458,7 +457,7 @@ public class FirstPageController {
             NewJobController controller = loader.getController();
 
             // Set an empty person into the controller
-            controller.set(new Job());
+            controller.setJob(new Job());
             while(true) {
                 // Create the dialog to add an Employee
                 Dialog<ButtonType> dialog = new Dialog<>();
@@ -476,8 +475,9 @@ public class FirstPageController {
                     size = controller.getJob().getSize();
                     dateOfJob = controller.getJob().getDateOfJob();
                     hours = controller.getJob().getHours();
+                    System.out.println("Nome lavoro" + name);
                     //Control about the inserted variables
-                    if (name.equals("")) {
+                    if (name.equals("0-") || idClient == 0 || idEmployee == 0 || address.equals("NULL") || size <= 0 || dateOfJob.equals("NULL") || hours <= 0) {
                         Alert alert2 = new Alert(Alert.AlertType.ERROR);
                         alert2.setTitle("Inserimento non corretto!");
                         alert2.setHeaderText("Inserimento non corretto");
@@ -490,9 +490,15 @@ public class FirstPageController {
                         try {
                             Class.forName(JDBC_Driver_MySQL);
                             Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-                            PreparedStatement statement = c.prepareStatement("INSERT INTO Type (name, description) VALUES (?,?);");
+                            PreparedStatement statement = c.prepareStatement("INSERT INTO Job (nameType, idClient, " +
+                                    "idEmployee, size, address, dateOfJob, hours) VALUES (?,?,?,?,?,?,?);");
                             statement.setString(1, name);
                             statement.setString(2, String.valueOf(idClient));
+                            statement.setString(3, String.valueOf(idEmployee));
+                            statement.setString(4, String.valueOf(size));
+                            statement.setString(5, address);
+                            statement.setString(6, dateOfJob.toString());
+                            statement.setString(7, hours.toString());
                             statement.executeUpdate();
                             break;
                         } catch (SQLException e) {

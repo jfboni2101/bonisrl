@@ -33,13 +33,13 @@ public class NewJobController {
             while(rs.next()) {
                 string = "";
                 string += rs.getInt("idClient");
-                string += " - ";
+                string += "-";
                 string += rs.getString("firstName");
                 string += " ";
                 string += rs.getString("lastName");
                 clientComboBox.getItems().add(string);
             }
-            clientComboBox.getSelectionModel().selectFirst();
+            clientComboBox.getSelectionModel().select("0-");
 
             statement = c.prepareStatement(   "SELECT E._id AS 'IdEmployee', E.firstName AS 'firstName',E.lastName AS 'lastName'\n" +
                     "FROM Employee AS E;");
@@ -47,15 +47,15 @@ public class NewJobController {
             while(rs.next()) {
                 string = "";
                 string += rs.getInt("idEmployee");
-                string += " - ";
+                string += "-";
                 string += rs.getString("firstName");
                 string += " ";
                 string += rs.getString("lastName");
                 employeeComboBox.getItems().add(string);
             }
-            employeeComboBox.getSelectionModel().selectFirst();
+            employeeComboBox.getSelectionModel().select("0-");
 
-            statement = c.prepareStatement(   "SELECT T.name AS name\n" +
+            statement = c.prepareStatement(   "SELECT T.name AS 'name'\n" +
                     "FROM Type AS T;");
             rs = statement.executeQuery();
             while(rs.next()) {
@@ -63,15 +63,15 @@ public class NewJobController {
                 string += rs.getString("name");
                 typeComboBox.getItems().add(string);
             }
-            typeComboBox.getSelectionModel().selectFirst();
+            typeComboBox.getSelectionModel().select("0-");
 
             addressTextField.textProperty().addListener((observable, oldValue, newValue) -> job.addressProperty().set(newValue));
             sizeTextField.textProperty().addListener((observable, oldValue, newValue) -> job.sizeProperty().set(Float.valueOf(newValue)));
             dateOfJobDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> job.dateOfJobProperty().set(newValue));
-            hourTextField.textProperty().addListener((observable, oldValue, newValue) -> job.hoursProperty().set(LocalTime.parse(newValue)));
-            clientComboBox.valueProperty().addListener((observable, oldValue, newValue) -> job.addressProperty().set(newValue));
-            employeeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> job.addressProperty().set(newValue));
-            typeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> job.addressProperty().set(newValue));
+            hourTextField.textProperty().addListener((observable, oldValue, newValue) -> job.hoursProperty().set(Float.valueOf(newValue)));
+            clientComboBox.valueProperty().addListener((observable, oldValue, newValue) -> job.idClientProperty().set(Integer.valueOf(newValue.substring(0, newValue.indexOf('-')))));
+            employeeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> job.idEmployeeProperty().set(Integer.valueOf(newValue.substring(0, newValue.indexOf('-')))));
+            typeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> job.nameTypeProperty().set(newValue));
 
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -81,13 +81,17 @@ public class NewJobController {
     }
 
     void update() {
+        addressTextField.textProperty().set(job.getAddress());
+        sizeTextField.textProperty().set(String.valueOf(job.getSize()));
+        dateOfJobDatePicker.valueProperty().set(LocalDate.now());
+        hourTextField.textProperty().set(String.valueOf(0));
     }
 
     public Job getJob() {
         return job;
     }
 
-    public void set(Job job) {
+    public void setJob(Job job) {
         this.job = job;
         update();
     }

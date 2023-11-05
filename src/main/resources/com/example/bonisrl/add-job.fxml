@@ -43,7 +43,7 @@
                         <Font size="22.0" />
                     </font>
                 </Label>
-                <DatePicker fx:id="dateOfJobDatePicker" layoutX="229.0" layoutY="321.0" prefHeight="26.0" prefWidth="470.0" />
+                <DatePicker fx:id="dateOfJobDatePicker" layoutX="229.0" layoutY="321.0" prefHeight="26.0" prefWidth="470.0" promptText="NULL" />
                 <Label layoutX="107.0" layoutY="320.0" text="Date Of Job">
                     <font>
                         <Font size="22.0" />

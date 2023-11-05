@@ -18,11 +18,13 @@ public class Job {
     StringProperty firstNameEmployee;
     StringProperty lastNameEmployee;
     ObjectProperty<LocalDate> dateOfJob;
-    ObjectProperty<LocalTime> hours;
+    ObjectProperty<Float> hours;
     ObjectProperty<Float> size;
     StringProperty address;
 
-    public Job(String nameType, Integer idClient, String firstNameClient, String lastNameClient, Integer idEmployee, String firstNameEmployee, String lastNameEmployee, LocalDate dateOfJob, LocalTime hours, Float size, String address) {
+    public Job(String nameType, Integer idClient, String firstNameClient, String lastNameClient, Integer idEmployee,
+               String firstNameEmployee, String lastNameEmployee, LocalDate dateOfJob, Float hours, Float size,
+               String address) {
         this.nameType = new SimpleStringProperty(nameType);
         this.idClient = new SimpleObjectProperty<>(idClient);
         this.firstNameClient = new SimpleStringProperty(firstNameClient);
@@ -37,15 +39,15 @@ public class Job {
     }
     public Job() {
         this.nameType = new SimpleStringProperty("");
-        this.idClient = new SimpleObjectProperty<>();
+        this.idClient = new SimpleObjectProperty<>(0);
         this.firstNameClient = new SimpleStringProperty("");
         this.lastNameClient = new SimpleStringProperty("");
-        this.idEmployee = new SimpleObjectProperty<>();
+        this.idEmployee = new SimpleObjectProperty<>(0);
         this.firstNameEmployee = new SimpleStringProperty("");
         this.lastNameEmployee = new SimpleStringProperty("");
-        this.dateOfJob = new SimpleObjectProperty<>();
-        this.hours = new SimpleObjectProperty<>();
-        this.size = new SimpleObjectProperty<>();
+        this.dateOfJob = new SimpleObjectProperty<>(LocalDate.now());
+        this.hours = new SimpleObjectProperty<>(00.00F);
+        this.size = new SimpleObjectProperty<>(0.0F);
         this.address = new SimpleStringProperty("");
     }
 
@@ -107,13 +109,13 @@ public class Job {
         this.dateOfJob.set(dateOfJob);
     }
 
-    public LocalTime getHours() {
+    public Float getHours() {
         return hours.get();
     }
-    public ObjectProperty<LocalTime> hoursProperty() {
+    public ObjectProperty<Float> hoursProperty() {
         return hours;
     }
-    public void setHours(LocalTime hours) {
+    public void setHours(Float hours) {
         this.hours.set(hours);
     }
 

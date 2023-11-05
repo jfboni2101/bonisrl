@@ -73,7 +73,9 @@ public class NewJobController {
             employeeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> job.addressProperty().set(newValue));
             typeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> job.addressProperty().set(newValue));
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }

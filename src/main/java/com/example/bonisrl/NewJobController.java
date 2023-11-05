@@ -1,0 +1,96 @@
+package com.example.bonisrl;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+
+import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.TimeZone;
+
+public class NewJobController {
+    @FXML private ComboBox<String> typeComboBox;
+    @FXML private ComboBox<String> clientComboBox;
+    @FXML private ComboBox<String> employeeComboBox;
+    @FXML private DatePicker dateOfJobDatePicker;
+    @FXML private TextField hourTextField;
+    @FXML private TextField sizeTextField;
+    @FXML private TextField addressTextField;
+    public static final String JDBC_Driver_MySQL = "com.mysql.cj.jdbc.Driver";
+    public static final String JDBC_URL_MySQL = "jdbc:mysql://localhost:3306/boni_srl?user=boniSrl&password" +
+            "=Magamago2101!" + "&serverTimezone=" + TimeZone.getDefault().getID();
+    Job job;
+
+    @FXML
+    public void initialize() {
+        try {
+            Class.forName(JDBC_Driver_MySQL);
+            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
+            PreparedStatement statement = c.prepareStatement(   "SELECT C._id AS 'idClient',C.firstName AS 'firstName', C.lastName AS 'lastName'\n" +
+                    "FROM Client AS C;");
+            ResultSet rs = statement.executeQuery();
+            String string;
+            while(rs.next()) {
+                string = "";
+                string += rs.getInt("idClient");
+                string += " - ";
+                string += rs.getString("firstName");
+                string += " ";
+                string += rs.getString("lastName");
+                clientComboBox.getItems().add(string);
+            }
+            clientComboBox.getSelectionModel().selectFirst();
+
+            statement = c.prepareStatement(   "SELECT E._id AS 'IdEmployee', E.firstName AS 'firstName',E.lastName AS 'lastName'\n" +
+                    "FROM Employee AS E;");
+            rs = statement.executeQuery();
+            while(rs.next()) {
+                string = "";
+                string += rs.getInt("idEmployee");
+                string += " - ";
+                string += rs.getString("firstName");
+                string += " ";
+                string += rs.getString("lastName");
+                employeeComboBox.getItems().add(string);
+            }
+            employeeComboBox.getSelectionModel().selectFirst();
+
+            statement = c.prepareStatement(   "SELECT T.name AS name\n" +
+                    "FROM Type AS T;");
+            rs = statement.executeQuery();
+            while(rs.next()) {
+                string = "";
+                string += rs.getString("name");
+                typeComboBox.getItems().add(string);
+            }
+            typeComboBox.getSelectionModel().selectFirst();
+
+            addressTextField.textProperty().addListener((observable, oldValue, newValue) -> job.addressProperty().set(newValue));
+            sizeTextField.textProperty().addListener((observable, oldValue, newValue) -> job.sizeProperty().set(Float.valueOf(newValue)));
+            dateOfJobDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> job.dateOfJobProperty().set(newValue));
+            hourTextField.textProperty().addListener((observable, oldValue, newValue) -> job.hoursProperty().set(LocalTime.parse(newValue)));
+            clientComboBox.valueProperty().addListener((observable, oldValue, newValue) -> job.addressProperty().set(newValue));
+            employeeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> job.addressProperty().set(newValue));
+            typeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> job.addressProperty().set(newValue));
+
+        } catch (ClassNotFoundException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    void update() {
+    }
+
+    public Job getJob() {
+        return job;
+    }
+
+    public void set(Job job) {
+        this.job = job;
+        update();
+    }
+
+
+
+
+}

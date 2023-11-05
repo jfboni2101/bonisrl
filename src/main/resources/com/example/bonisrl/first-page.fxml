@@ -140,7 +140,7 @@
                      <bottom>
                         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                           <buttons>
-                            <Button mnemonicParsing="false" text="Add Job" />
+                            <Button mnemonicParsing="false" onAction="#handleAddJob" text="Add Job" />
                               <Button mnemonicParsing="false" text="Delete Job" />
                           </buttons>
                         </ButtonBar>

@@ -195,34 +195,39 @@ public class FirstPageController {
         try {
             Class.forName(JDBC_Driver_MySQL);
             Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-            PreparedStatement statement = c.prepareStatement(   "SELECT T.name, C.lastName AS 'lastNameClient', C.firstName AS 'firstNameClient', E.lastName AS 'lastNameEmployee', E.firstName AS 'firstNameEmployee', J.dateOfJob, J.hours,  J.size, J.address\n" + "FROM Job AS J\n" +
-                                                                    "JOIN Client AS C ON (C._id=J.idClient)\n" +
-                                                                    "JOIN Employee AS E ON (E._id=J.idEmployee)\n" +
-                                                                    "JOIN Type AS T ON (T.name=J.nameType);");
+
+            PreparedStatement statement = c.prepareStatement(   "SELECT T.name, C._id AS 'idClient',  C.lastName AS 'lastNameClient', C.firstName AS 'firstNameClient', E._id AS 'idEmployee', E.lastName AS 'lastNameEmployee', E.firstName AS 'firstNameEmployee', J.dateOfJob, J.hours,  J.size, J.address\n" + "FROM Job AS J\n" +
+                                                                     "JOIN Client AS C ON (C._id=J.idClient)\n" +
+                                                                     "JOIN Employee AS E ON (E._id=J.idEmployee)\n" +
+                                                                     "JOIN Type AS T ON (T.name=J.nameType);");
 
             ResultSet rs = statement.executeQuery();
             String nameType;
+            Integer idClient;
             String firstNameClient;
             String lastNameClient;
+            Integer idEmployee;
             String firstNameEmployee;
             String lastNameEmployee;
             LocalDate dateOfJob;
             LocalTime hours;
-            float size;
+            Float size;
             String address;
 
             while (rs.next()) {
                 nameType = rs.getString("name");
-                lastNameClient = rs.getString("lastNameClient");
+                idClient = rs.getInt("idClient");
                 firstNameClient = rs.getString("firstNameClient");
-                lastNameEmployee = rs.getString("lastNameEmployee");
+                lastNameClient = rs.getString("lastNameClient");
+                idEmployee = rs.getInt("idEmployee");
                 firstNameEmployee = rs.getString("firstNameEmployee");
+                lastNameEmployee = rs.getString("lastNameEmployee");
                 dateOfJob = rs.getDate("dateOfJob").toLocalDate();
                 hours = rs.getTime("hours").toLocalTime();
-                size = rs.getInt("size");
+                size = rs.getFloat("size");
                 address = rs.getString("address");
-                job.add(new Job(nameType, firstNameClient, lastNameClient, firstNameEmployee, lastNameEmployee,
-                         dateOfJob, hours, size, address));
+                job.add(new Job(nameType, idClient, firstNameClient, lastNameClient, idEmployee, firstNameEmployee, lastNameEmployee, dateOfJob, hours,
+                        size, address));
             }
         } catch (SQLException e) {
             Alert alert3 = new Alert(Alert.AlertType.ERROR);
@@ -414,6 +419,80 @@ public class FirstPageController {
                             PreparedStatement statement = c.prepareStatement("INSERT INTO Type (name, description) VALUES (?,?);");
                             statement.setString(1, name);
                             statement.setString(2, description);
+                            statement.executeUpdate();
+                            break;
+                        } catch (SQLException e) {
+                            Alert alert3 = new Alert(Alert.AlertType.ERROR);
+                            alert3.setTitle("ERRORE!");
+                            alert3.setHeaderText("Errore SQL");
+                            alert3.setContentText("C'è stato un errore nell'SQL");
+                            alert3.showAndWait();
+                        } catch (ClassNotFoundException e) {
+                            Alert alert4 = new Alert(Alert.AlertType.ERROR);
+                            alert4.setTitle("ERRORE!");
+                            alert4.setHeaderText("Errore nella creazione Class.forName()");
+                            alert4.setContentText("C'è stato un errore nella creazione di Class.forName()");
+                            alert4.showAndWait();
+                        }
+                    }
+                } else {
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    void handleAddJob(ActionEvent event) {
+        try {
+            String name, address;
+            Integer idClient, idEmployee;
+            Float size;
+            LocalDate dateOfJob;
+            LocalTime hours;
+
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("add-job.fxml"));
+            DialogPane view = loader.load();
+            NewJobController controller = loader.getController();
+
+            // Set an empty person into the controller
+            controller.set(new Job());
+            while(true) {
+                // Create the dialog to add an Employee
+                Dialog<ButtonType> dialog = new Dialog<>();
+                dialog.setTitle("New Job");
+                dialog.initModality(Modality.WINDOW_MODAL);
+                dialog.setDialogPane(view);
+
+                // Show the dialog and wait until the user closes it
+                Optional<ButtonType> clickedButton = dialog.showAndWait();
+                if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+                    name = controller.getJob().getNameType();
+                    idClient = controller.getJob().getIdClient();
+                    idEmployee = controller.getJob().getIdEmployee();
+                    address = controller.getJob().getAddress();
+                    size = controller.getJob().getSize();
+                    dateOfJob = controller.getJob().getDateOfJob();
+                    hours = controller.getJob().getHours();
+                    //Control about the inserted variables
+                    if (name.equals("")) {
+                        Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                        alert2.setTitle("Inserimento non corretto!");
+                        alert2.setHeaderText("Inserimento non corretto");
+                        alert2.setContentText("Hai sbagliato a scrivere il nome del tipo di lavoro");
+                        alert2.showAndWait();
+                    } else {
+                        Job newJob = controller.getJob();
+                        job.add(newJob);
+                        //Add the new Employee
+                        try {
+                            Class.forName(JDBC_Driver_MySQL);
+                            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
+                            PreparedStatement statement = c.prepareStatement("INSERT INTO Type (name, description) VALUES (?,?);");
+                            statement.setString(1, name);
+                            statement.setString(2, String.valueOf(idClient));
                             statement.executeUpdate();
                             break;
                         } catch (SQLException e) {

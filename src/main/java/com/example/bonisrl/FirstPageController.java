@@ -198,12 +198,18 @@ public class FirstPageController {
             Class.forName(JDBC_Driver_MySQL);
             Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
 
-            PreparedStatement statement = c.prepareStatement(   "SELECT T.name, C._id AS 'idClient',  C.lastName AS 'lastNameClient', C.firstName AS 'firstNameClient', E._id AS 'idEmployee', E.lastName AS 'lastNameEmployee', E.firstName AS 'firstNameEmployee', J.dateOfJob, J.hours,  J.size, J.address\n" + "FROM Job AS J\n" +
-                                                                     "JOIN Client AS C ON (C._id=J.idClient)\n" +
-                                                                     "JOIN Employee AS E ON (E._id=J.idEmployee)\n" +
-                                                                     "JOIN Type AS T ON (T.name=J.nameType);");
+            PreparedStatement statement = c.prepareStatement(   "SELECT J._id AS 'id', T.name AS 'name', C._id AS " +
+                    "'idClient',  C" +
+                    ".lastName AS 'lastNameClient', C.firstName AS 'firstNameClient', E._id AS 'idEmployee'," +
+                    " E.lastName AS 'lastNameEmployee', E.firstName AS 'firstNameEmployee', J.dateOfJob, J.hours," +
+                    "  J.size, J.address\n" +
+                    "FROM Job AS J\n" +
+                    "JOIN Client AS C ON (C._id=J.idClient)\n" +
+                    "JOIN Employee AS E ON (E._id=J.idEmployee)\n" +
+                    "JOIN Type AS T ON (T.name=J.nameType);");
 
             ResultSet rs = statement.executeQuery();
+            Integer id;
             String nameType;
             Integer idClient;
             String firstNameClient;
@@ -217,6 +223,7 @@ public class FirstPageController {
             String address;
 
             while (rs.next()) {
+                id = rs.getInt("id");
                 nameType = rs.getString("name");
                 idClient = rs.getInt("idClient");
                 firstNameClient = rs.getString("firstNameClient");
@@ -228,7 +235,8 @@ public class FirstPageController {
                 hours = rs.getFloat("hours");
                 size = rs.getFloat("size");
                 address = rs.getString("address");
-                job.add(new Job(nameType, idClient, firstNameClient, lastNameClient, idEmployee, firstNameEmployee, lastNameEmployee, dateOfJob, hours,
+                job.add(new Job(id, nameType, idClient, firstNameClient, lastNameClient, idEmployee, firstNameEmployee,
+                        lastNameEmployee, dateOfJob, hours,
                         size, address));
             }
         } catch (SQLException e) {
@@ -475,8 +483,8 @@ public class FirstPageController {
     @FXML
     void handleAddJob(ActionEvent event) {
         try {
-            String name, address;
-            Integer idClient, idEmployee;
+            String name, address, nameEmployee, lastnameEmployee, nameClient, lastnameClient;
+            Integer idJob, idClient, idEmployee;
             Float size, hours;
             LocalDate dateOfJob;
 
@@ -512,13 +520,30 @@ public class FirstPageController {
                         alert2.setContentText("Hai sbagliato a scrivere il nome del tipo di lavoro");
                         alert2.showAndWait();
                     } else {
-                        Job newJob = controller.getJob();
-                        job.add(newJob);
+
                         //Add the new Employee
                         try {
                             Class.forName(JDBC_Driver_MySQL);
                             Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-                            PreparedStatement statement = c.prepareStatement("INSERT INTO Job (nameType, idClient, " +
+                            PreparedStatement statement = c.prepareStatement(   "SELECT firstName AS 'firstName', " +
+                                    "lastName AS 'lastName'  FROM Employee " +
+                                    "WHERE _id = ?");
+                            statement.setString(1, String.valueOf(idEmployee));
+                            ResultSet rs = statement.executeQuery();
+                            rs.next();
+                            nameEmployee = rs.getString("firstName");
+                            lastnameEmployee = rs.getString("lastName");
+
+                            statement = c.prepareStatement(   "SELECT firstName AS 'firstName', " +
+                                    "lastName AS 'lastName'  FROM Client " +
+                                    "WHERE _id = ?");
+                            statement.setString(1, String.valueOf(idClient));
+                            rs = statement.executeQuery();
+                            rs.next();
+                            nameClient = rs.getString("firstName");
+                            lastnameClient = rs.getString("lastName");
+
+                            statement = c.prepareStatement("INSERT INTO Job (nameType, idClient, " +
                                     "idEmployee, size, address, dateOfJob, hours) VALUES (?,?,?,?,?,?,?);");
                             statement.setString(1, name);
                             statement.setString(2, String.valueOf(idClient));
@@ -528,6 +553,25 @@ public class FirstPageController {
                             statement.setString(6, dateOfJob.toString());
                             statement.setString(7, hours.toString());
                             statement.executeUpdate();
+
+                            statement = c.prepareStatement(   "SELECT _id AS 'id'FROM Job " +
+                                    "WHERE nameType = ? AND idClient = ? AND idEmployee = ? AND size = ? AND" +
+                                    "address = ? AND dateOfJob = ? AND hours = ?");
+                            statement.setString(1, String.valueOf(name));
+                            statement.setString(2, String.valueOf(idClient));
+                            statement.setString(3, String.valueOf(idEmployee));
+                            statement.setString(4, String.valueOf(size));
+                            statement.setString(5, String.valueOf(address));
+                            statement.setString(6, String.valueOf(dateOfJob));
+                            statement.setString(7, String.valueOf(hours));
+                            rs = statement.executeQuery();
+                            rs.next();
+                            idJob = rs.getInt("id");
+
+                            Job newJob = new Job(idJob, name, idClient, nameClient, lastnameClient, idEmployee,
+                                    nameEmployee,
+                                    lastnameEmployee, dateOfJob, hours, size, address);
+                            job.add(newJob);
                             break;
                         } catch (SQLException e) {
                             Alert alert3 = new Alert(Alert.AlertType.ERROR);
@@ -576,7 +620,7 @@ public class FirstPageController {
                 if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
                     id = controller.getPerson().getIdPerson();
                     //Control about the inserted variables
-                    if (id.equals("0-")) {
+                    if (id.equals(0)) {
                         Alert alert2 = new Alert(Alert.AlertType.ERROR);
                         alert2.setTitle("Inserimento non corretto!");
                         alert2.setHeaderText("Inserimento non corretto");
@@ -647,7 +691,7 @@ public class FirstPageController {
                 if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
                     id = controller.getPerson().getIdPerson();
                     //Control about the inserted variables
-                    if (id.equals("0-")) {
+                    if (id.equals(0)) {
                         Alert alert2 = new Alert(Alert.AlertType.ERROR);
                         alert2.setTitle("Inserimento non corretto!");
                         alert2.setHeaderText("Inserimento non corretto");
@@ -705,7 +749,7 @@ public class FirstPageController {
             DeleteTypeController controller = loader.getController();
 
             // Set an empty person into the controller
-            controller.setJob(new TypeOfJob());
+            controller.setType(new TypeOfJob());
             while(true) {
                 // Create the dialog to delete an Employee
                 Dialog<ButtonType> dialog = new Dialog<>();
@@ -718,7 +762,7 @@ public class FirstPageController {
                 if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
                     name = controller.getType().getName();
                     //Control about the inserted variables
-                    if (name.equals("0")) {
+                    if (name.equals("")) {
                         Alert alert2 = new Alert(Alert.AlertType.ERROR);
                         alert2.setTitle("Inserimento non corretto!");
                         alert2.setHeaderText("Inserimento non corretto");
@@ -740,6 +784,78 @@ public class FirstPageController {
                             PreparedStatement statement = c.prepareStatement("DELETE FROM Type\n" + "WHERE name = " +
                                     "?;");
                             statement.setString(1, name);
+                            statement.executeUpdate();
+                            break;
+                        } catch (SQLException e) {
+                            Alert alert3 = new Alert(Alert.AlertType.ERROR);
+                            alert3.setTitle("ERRORE!");
+                            alert3.setHeaderText("Errore SQL");
+                            alert3.setContentText("C'è stato un errore nell'SQL");
+                            alert3.showAndWait();
+                        } catch (ClassNotFoundException e) {
+                            Alert alert4 = new Alert(Alert.AlertType.ERROR);
+                            alert4.setTitle("ERRORE!");
+                            alert4.setHeaderText("Errore nella creazione Class.forName()");
+                            alert4.setContentText("C'è stato un errore nella creazione di Class.forName()");
+                            alert4.showAndWait();
+                        }
+                    }
+                } else {
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void handleDeleteJob(ActionEvent event) {
+        try {
+            Integer id;
+
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("delete-job.fxml"));
+            DialogPane view = loader.load();
+            DeleteJobController controller = loader.getController();
+
+            // Set an empty person into the controller
+            controller.setJob(new Job());
+            while(true) {
+                // Create the dialog to delete an Employee
+                Dialog<ButtonType> dialog = new Dialog<>();
+                dialog.setTitle("Delete Type");
+                dialog.initModality(Modality.WINDOW_MODAL);
+                dialog.setDialogPane(view);
+
+                // Show the dialog and wait until the user closes it
+                Optional<ButtonType> clickedButton = dialog.showAndWait();
+                if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+                    id = controller.getJob().getIdJob();
+                    System.out.println(id);
+                    //Control about the inserted variables
+                    if (id.equals(0)) {
+                        Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                        alert2.setTitle("Inserimento non corretto!");
+                        alert2.setHeaderText("Inserimento non corretto");
+                        alert2.setContentText("Hai sbagliato a scrivere il nome del tipo di lavoro");
+                        alert2.showAndWait();
+                    } else {
+                        Job deleteJob = null;
+                        for(Job j : job) {
+                            if(j.getIdJob().equals(id)) {
+                                deleteJob = j;
+                                break;
+                            }
+                        }
+                        job.remove(deleteJob);
+                        //Add the new Employee
+                        try {
+                            Class.forName(JDBC_Driver_MySQL);
+                            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
+                            PreparedStatement statement = c.prepareStatement("DELETE FROM Job\n" + "WHERE _id = " +
+                                    "?;");
+                            statement.setString(1, String.valueOf(id));
                             statement.executeUpdate();
                             break;
                         } catch (SQLException e) {

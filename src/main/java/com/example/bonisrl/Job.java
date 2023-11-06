@@ -10,6 +10,7 @@ import java.time.LocalTime;
 import java.util.Objects;
 
 public class Job {
+    ObjectProperty<Integer> idJob;
     StringProperty nameType;
     ObjectProperty<Integer> idClient;
     StringProperty firstNameClient;
@@ -22,9 +23,11 @@ public class Job {
     ObjectProperty<Float> size;
     StringProperty address;
 
-    public Job(String nameType, Integer idClient, String firstNameClient, String lastNameClient, Integer idEmployee,
+    public Job(Integer id, String nameType, Integer idClient, String firstNameClient, String lastNameClient,
+               Integer idEmployee,
                String firstNameEmployee, String lastNameEmployee, LocalDate dateOfJob, Float hours, Float size,
                String address) {
+        this.idJob = new SimpleObjectProperty<>(id);
         this.nameType = new SimpleStringProperty(nameType);
         this.idClient = new SimpleObjectProperty<>(idClient);
         this.firstNameClient = new SimpleStringProperty(firstNameClient);
@@ -38,6 +41,7 @@ public class Job {
         this.address = new SimpleStringProperty(address);
     }
     public Job() {
+        this.idJob = new SimpleObjectProperty<>(0);
         this.nameType = new SimpleStringProperty("");
         this.idClient = new SimpleObjectProperty<>(0);
         this.firstNameClient = new SimpleStringProperty("");
@@ -50,6 +54,10 @@ public class Job {
         this.size = new SimpleObjectProperty<>(0.0F);
         this.address = new SimpleStringProperty("");
     }
+
+    public Integer getIdJob() {return this.idJob.get();}
+    public ObjectProperty<Integer> idJobProperty() {return this.idJob;}
+    public void setIdJob(Integer idJob) {this.idJob.set(idJob);}
 
     public String getNameType() {return nameType.get();}
     public StringProperty nameTypeProperty() {

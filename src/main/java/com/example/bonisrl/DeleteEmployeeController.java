@@ -39,7 +39,7 @@ public class DeleteEmployeeController {
                 string += rs.getString("birthday");
                 selectComboBox.getItems().add(string);
             }
-            selectComboBox.getSelectionModel().select("0-");
+            selectComboBox.getSelectionModel().select("SELECT EMPLOYEE");
 
             selectComboBox.valueProperty().addListener((observable, oldValue, newValue) -> person.idPersonProperty().set(Integer.valueOf(newValue.substring(0, newValue.indexOf('-')))));
 

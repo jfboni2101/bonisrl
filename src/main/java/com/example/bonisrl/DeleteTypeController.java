@@ -35,7 +35,7 @@ public class DeleteTypeController {
                 string += rs.getString("description");
                 selectComboBox.getItems().add(string);
             }
-            selectComboBox.getSelectionModel().select("0");
+            selectComboBox.getSelectionModel().select("SELECT TYPE OF JOB");
 
             selectComboBox.valueProperty().addListener((observable, oldValue, newValue) -> type.nameProperty().set(newValue.substring(0, newValue.indexOf('-'))));
 
@@ -53,7 +53,7 @@ public class DeleteTypeController {
         return type;
     }
 
-    public void setJob(TypeOfJob type) {
+    public void setType(TypeOfJob type) {
         this.type = type;
         update();
     }

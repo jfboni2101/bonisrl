@@ -18,9 +18,13 @@
           <Menu mnemonicParsing="false" text="Operations">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#handleAddEmployee" text="Add Employee" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleDeleteEmployee" text="Delete Employee" />
                   <MenuItem mnemonicParsing="false" onAction="#handleAddClient" text="Add Client" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleDeleteClient" text="Delete Client" />
                   <MenuItem mnemonicParsing="false" onAction="#handleAddType" text="Add Type of Job" />
-                  <MenuItem mnemonicParsing="false" text="Add Job" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleDeleteType" text="Delete Type of Job" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleAddJob" text="Add Job" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleDeleteJob" text="Delete Job" />
                   <MenuItem mnemonicParsing="false" onAction="#handleQuit" text="Quit" />
             </items>
           </Menu>
@@ -144,7 +148,7 @@
                         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                           <buttons>
                             <Button mnemonicParsing="false" onAction="#handleAddJob" text="Add Job" />
-                              <Button mnemonicParsing="false" text="Delete Job" />
+                              <Button mnemonicParsing="false" onAction="#handleDeleteJob" text="Delete Job" />
                           </buttons>
                         </ButtonBar>
                      </bottom>

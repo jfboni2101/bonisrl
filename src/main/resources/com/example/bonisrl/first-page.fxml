@@ -87,6 +87,7 @@
                         <ButtonBar prefHeight="40.0" prefWidth="953.0" BorderPane.alignment="CENTER">
                           <buttons>
                               <Button mnemonicParsing="false" onAction="#handleAddClient" text="Add Client" />
+                              <Button mnemonicParsing="false" onAction="#handleDeleteClient" text="Delete Client" />
                           </buttons>
                         </ButtonBar>
                      </bottom>
@@ -111,6 +112,7 @@
                         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                            <buttons>
                               <Button mnemonicParsing="false" onAction="#handleAddType" text="Add Type Of Job" />
+                              <Button mnemonicParsing="false" onAction="#handleDeleteType" text="Delete Type Of Job" />
                            </buttons>
                         </ButtonBar>
                      </bottom>

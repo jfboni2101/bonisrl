@@ -101,15 +101,16 @@ public class FirstPageController {
             PreparedStatement statement = c.prepareStatement("SELECT E.* FROM Employee AS E");
 
             ResultSet rs = statement.executeQuery();
-            String firstname;
-            String lastname;
+            String firstname, lastname;
+            Integer id;
             LocalDate birthday;
 
             while (rs.next()) {
+                id = rs.getInt("_id");
                 lastname = rs.getString("lastName");
                 firstname = rs.getString("firstName");
                 birthday = LocalDate.parse(rs.getString("birthday"));
-                employee.add(new Person(lastname, firstname, birthday));
+                employee.add(new Person(id, lastname, firstname, birthday));
             }
         } catch (SQLException e) {
             Alert alert3 = new Alert(Alert.AlertType.ERROR);
@@ -134,15 +135,16 @@ public class FirstPageController {
             PreparedStatement statement = c.prepareStatement("SELECT C.* FROM Client AS C");
 
             ResultSet rs = statement.executeQuery();
-            String firstname;
-            String lastname;
+            String firstname, lastname;
+            Integer id;
             LocalDate birthday;
 
             while (rs.next()) {
+                id = rs.getInt("_id");
                 lastname = rs.getString("lastName");
                 firstname = rs.getString("firstName");
                 birthday = LocalDate.parse(rs.getString("birthday"));
-                client.add(new Person(lastname, firstname, birthday));
+                client.add(new Person(id, lastname, firstname, birthday));
             }
         } catch (SQLException e) {
             Alert alert3 = new Alert(Alert.AlertType.ERROR);
@@ -250,6 +252,7 @@ public class FirstPageController {
         try {
             String firstName, lastName;
             LocalDate birthday;
+            Integer id;
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("add-employee.fxml"));
             DialogPane view = loader.load();
@@ -279,7 +282,7 @@ public class FirstPageController {
                         alert2.showAndWait();
                     } else {
                         Person newEmployee = controller.getPerson();
-                        employee.add(newEmployee);
+
                         //Add the new Employee
                         try {
                             Class.forName(JDBC_Driver_MySQL);
@@ -289,6 +292,18 @@ public class FirstPageController {
                             statement.setString(2, firstName);
                             statement.setString(3, String.valueOf(birthday));
                             statement.executeUpdate();
+
+                            statement = c.prepareStatement("SELECT _id  FROM Employee WHERE lastName = ? AND " +
+                                    "firstName =" +
+                                    " ? AND birthday = ?");
+                            statement.setString(1, lastName);
+                            statement.setString(2, firstName);
+                            statement.setString(3, String.valueOf(birthday));
+                            ResultSet rs = statement.executeQuery();
+                            rs.next();
+                            id = rs.getInt("_id");
+                            newEmployee.setIdPerson(id);
+                            employee.add(newEmployee);
                             break;
                         } catch (SQLException e) {
                             Alert alert3 = new Alert(Alert.AlertType.ERROR);
@@ -475,7 +490,6 @@ public class FirstPageController {
                     size = controller.getJob().getSize();
                     dateOfJob = controller.getJob().getDateOfJob();
                     hours = controller.getJob().getHours();
-                    System.out.println("Nome lavoro" + name);
                     //Control about the inserted variables
                     if (name.equals("0-") || idClient == 0 || idEmployee == 0 || address.equals("NULL") || size <= 0 || dateOfJob.equals("NULL") || hours <= 0) {
                         Alert alert2 = new Alert(Alert.AlertType.ERROR);
@@ -523,6 +537,79 @@ public class FirstPageController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    void handleDeleteEmployee(ActionEvent event) {
+        try {
+            Integer id;
+
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("delete-employee.fxml"));
+            DialogPane view = loader.load();
+            DeleteEmployeeController controller = loader.getController();
+
+            // Set an empty person into the controller
+            controller.setPerson(new Person());
+            while(true) {
+                // Create the dialog to delete an Employee
+                Dialog<ButtonType> dialog = new Dialog<>();
+                dialog.setTitle("New Job");
+                dialog.initModality(Modality.WINDOW_MODAL);
+                dialog.setDialogPane(view);
+
+                // Show the dialog and wait until the user closes it
+                Optional<ButtonType> clickedButton = dialog.showAndWait();
+                if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+                    id = controller.getPerson().getIdPerson();
+                    //Control about the inserted variables
+                    if (id.equals("0-")) {
+                        Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                        alert2.setTitle("Inserimento non corretto!");
+                        alert2.setHeaderText("Inserimento non corretto");
+                        alert2.setContentText("Hai sbagliato a scrivere il nome del tipo di lavoro");
+                        alert2.showAndWait();
+                    } else {
+                        Person newPerson = null;
+                        for(Person p : employee) {
+                            if(p.getIdPerson().equals(id)) {
+                                newPerson = p;
+                                break;
+                            }
+                        }
+                        employee.remove(newPerson);
+                        //Add the new Employee
+                        try {
+                            Class.forName(JDBC_Driver_MySQL);
+                            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
+                            PreparedStatement statement = c.prepareStatement("DELETE FROM Employee\n" + "WHERE _id = " +
+                                    "?;");
+                            statement.setString(1, String.valueOf(id));
+                            statement.executeUpdate();
+                            break;
+                        } catch (SQLException e) {
+                            Alert alert3 = new Alert(Alert.AlertType.ERROR);
+                            alert3.setTitle("ERRORE!");
+                            alert3.setHeaderText("Errore SQL");
+                            alert3.setContentText("C'è stato un errore nell'SQL");
+                            alert3.showAndWait();
+                        } catch (ClassNotFoundException e) {
+                            Alert alert4 = new Alert(Alert.AlertType.ERROR);
+                            alert4.setTitle("ERRORE!");
+                            alert4.setHeaderText("Errore nella creazione Class.forName()");
+                            alert4.setContentText("C'è stato un errore nella creazione di Class.forName()");
+                            alert4.showAndWait();
+                        }
+                    }
+                } else {
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @FXML
     void handleQuit(ActionEvent event) {
         Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);

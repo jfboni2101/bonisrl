@@ -9,23 +9,27 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Person {
+    ObjectProperty<Integer> idPerson;
     StringProperty lastName;
     StringProperty firstName;
     ObjectProperty<LocalDate>  birthday;
 
-    public Person(String lastName, String firstName, LocalDate birthday) {
+    public Person(Integer id, String lastName, String firstName, LocalDate birthday) {
+        this.idPerson = new SimpleObjectProperty<>(id);
         this.lastName = new SimpleStringProperty(lastName);
         this.firstName = new SimpleStringProperty(firstName);
         this.birthday = new SimpleObjectProperty<>(birthday);
     }
 
     public Person(String lastName, String firstName) {
+        this.idPerson = new SimpleObjectProperty<>(0);
         this.lastName = new SimpleStringProperty(lastName);
         this.firstName = new SimpleStringProperty(firstName);
         this.birthday = new SimpleObjectProperty<>(LocalDate.now());
     }
 
     public Person() {
+        this.idPerson = new SimpleObjectProperty<>(0);
         this.lastName = new SimpleStringProperty("NULL");
         this.firstName = new SimpleStringProperty("NULL");
         this.birthday = new SimpleObjectProperty<>(LocalDate.now());
@@ -33,6 +37,9 @@ public class Person {
 
 
 
+    public Integer getIdPerson() {return this.idPerson.get();}
+    public ObjectProperty<Integer> idPersonProperty() {return this.idPerson;}
+    public void setIdPerson(Integer idPerson) {this.idPerson.set(idPerson);}
 
 
 

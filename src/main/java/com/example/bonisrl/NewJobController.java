@@ -39,7 +39,7 @@ public class NewJobController {
                 string += rs.getString("lastName");
                 clientComboBox.getItems().add(string);
             }
-            clientComboBox.getSelectionModel().select("0-");
+            clientComboBox.getSelectionModel().select("SELECT CLIENT");
 
             statement = c.prepareStatement(   "SELECT E._id AS 'IdEmployee', E.firstName AS 'firstName',E.lastName AS 'lastName'\n" +
                     "FROM Employee AS E;");
@@ -53,7 +53,7 @@ public class NewJobController {
                 string += rs.getString("lastName");
                 employeeComboBox.getItems().add(string);
             }
-            employeeComboBox.getSelectionModel().select("0-");
+            employeeComboBox.getSelectionModel().select("SELECT EMPLOYEE");
 
             statement = c.prepareStatement(   "SELECT T.name AS 'name'\n" +
                     "FROM Type AS T;");
@@ -63,7 +63,7 @@ public class NewJobController {
                 string += rs.getString("name");
                 typeComboBox.getItems().add(string);
             }
-            typeComboBox.getSelectionModel().select("0-");
+            typeComboBox.getSelectionModel().select("SELECT TYPE OF JOB");
 
             addressTextField.textProperty().addListener((observable, oldValue, newValue) -> job.addressProperty().set(newValue));
             sizeTextField.textProperty().addListener((observable, oldValue, newValue) -> job.sizeProperty().set(Float.valueOf(newValue)));

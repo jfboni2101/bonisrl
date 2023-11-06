@@ -513,7 +513,7 @@ public class FirstPageController {
                     dateOfJob = controller.getJob().getDateOfJob();
                     hours = controller.getJob().getHours();
                     //Control about the inserted variables
-                    if (name.equals("0-") || idClient == 0 || idEmployee == 0 || address.equals("NULL") || size <= 0 || dateOfJob.equals("NULL") || hours <= 0) {
+                    if (name.equals("") || idClient == 0 || idEmployee == 0 || address.equals("") || size <= 0 || dateOfJob.equals(null) || hours <= 0) {
                         Alert alert2 = new Alert(Alert.AlertType.ERROR);
                         alert2.setTitle("Inserimento non corretto!");
                         alert2.setHeaderText("Inserimento non corretto");
@@ -546,27 +546,34 @@ public class FirstPageController {
                             statement = c.prepareStatement("INSERT INTO Job (nameType, idClient, " +
                                     "idEmployee, size, address, dateOfJob, hours) VALUES (?,?,?,?,?,?,?);");
                             statement.setString(1, name);
-                            statement.setString(2, String.valueOf(idClient));
-                            statement.setString(3, String.valueOf(idEmployee));
-                            statement.setString(4, String.valueOf(size));
+                            statement.setInt(2, idClient);
+                            statement.setInt(3, idEmployee);
+                            statement.setFloat(4, size);
                             statement.setString(5, address);
-                            statement.setString(6, dateOfJob.toString());
-                            statement.setString(7, hours.toString());
+                            statement.setDate(6, Date.valueOf(dateOfJob));
+                            statement.setFloat(7, hours);
                             statement.executeUpdate();
 
-                            statement = c.prepareStatement(   "SELECT _id AS 'id'FROM Job " +
-                                    "WHERE nameType = ? AND idClient = ? AND idEmployee = ? AND size = ? AND" +
-                                    "address = ? AND dateOfJob = ? AND hours = ?");
-                            statement.setString(1, String.valueOf(name));
-                            statement.setString(2, String.valueOf(idClient));
-                            statement.setString(3, String.valueOf(idEmployee));
-                            statement.setString(4, String.valueOf(size));
-                            statement.setString(5, String.valueOf(address));
-                            statement.setString(6, String.valueOf(dateOfJob));
-                            statement.setString(7, String.valueOf(hours));
+                            System.out.println("sono qui1");
+
+                            statement = c.prepareStatement(   "SELECT _id AS 'id' FROM Job AS J WHERE J.nameType = ? " +
+                                    "AND J.idClient = ? AND J.idEmployee = ? AND J.size = ? AND J.address = ? AND J.dateOfJob = ? AND J.hours = ?;");
+                            statement.setString(1, name);
+                            statement.setInt(2, idClient);
+                            statement.setInt(3, idEmployee);
+                            statement.setFloat(4, size);
+                            statement.setString(5, address);
+                            statement.setDate(6, Date.valueOf(dateOfJob));
+                            statement.setFloat(7, hours);
                             rs = statement.executeQuery();
-                            rs.next();
-                            idJob = rs.getInt("id");
+                            if (rs.next()) {
+                                idJob = rs.getInt("id");
+                            }else {
+                                idJob = -1;
+                            }
+
+                            System.out.println("sono qui2");
+
 
                             Job newJob = new Job(idJob, name, idClient, nameClient, lastnameClient, idEmployee,
                                     nameEmployee,
@@ -595,7 +602,6 @@ public class FirstPageController {
             e.printStackTrace();
         }
     }
-
     @FXML
     void handleDeleteEmployee(ActionEvent event) {
         try {
@@ -666,7 +672,6 @@ public class FirstPageController {
             e.printStackTrace();
         }
     }
-
     @FXML
     void handleDeleteClient(ActionEvent event) {
         try {
@@ -737,7 +742,6 @@ public class FirstPageController {
             e.printStackTrace();
         }
     }
-
     @FXML
     void handleDeleteType(ActionEvent event) {
         try {
@@ -808,7 +812,6 @@ public class FirstPageController {
             e.printStackTrace();
         }
     }
-
     @FXML
     void handleDeleteJob(ActionEvent event) {
         try {
@@ -880,7 +883,6 @@ public class FirstPageController {
             e.printStackTrace();
         }
     }
-
     @FXML
     void handleQuit(ActionEvent event) {
         Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);

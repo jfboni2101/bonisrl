@@ -49,7 +49,7 @@ public class Job {
         this.idEmployee = new SimpleObjectProperty<>(0);
         this.firstNameEmployee = new SimpleStringProperty("");
         this.lastNameEmployee = new SimpleStringProperty("");
-        this.dateOfJob = new SimpleObjectProperty<>(LocalDate.now());
+        this.dateOfJob = new SimpleObjectProperty<>();
         this.hours = new SimpleObjectProperty<>(00.00F);
         this.size = new SimpleObjectProperty<>(0.0F);
         this.address = new SimpleStringProperty("");

@@ -5,12 +5,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -198,15 +195,12 @@ public class FirstPageController {
             Class.forName(JDBC_Driver_MySQL);
             Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
 
-            PreparedStatement statement = c.prepareStatement(   "SELECT J._id AS 'id', T.name AS 'name', C._id AS " +
-                    "'idClient',  C" +
-                    ".lastName AS 'lastNameClient', C.firstName AS 'firstNameClient', E._id AS 'idEmployee'," +
-                    " E.lastName AS 'lastNameEmployee', E.firstName AS 'firstNameEmployee', J.dateOfJob, J.hours," +
-                    "  J.size, J.address\n" +
-                    "FROM Job AS J\n" +
-                    "JOIN Client AS C ON (C._id=J.idClient)\n" +
-                    "JOIN Employee AS E ON (E._id=J.idEmployee)\n" +
-                    "JOIN Type AS T ON (T.name=J.nameType);");
+            PreparedStatement statement = c.prepareStatement("""
+                    SELECT J._id AS 'id', T.name AS 'name', C._id AS 'idClient',  C.lastName AS 'lastNameClient', C.firstName AS 'firstNameClient', E._id AS 'idEmployee', E.lastName AS 'lastNameEmployee', E.firstName AS 'firstNameEmployee', J.dateOfJob, J.hours,  J.size, J.address
+                    FROM Job AS J
+                    JOIN Client AS C ON (C._id=J.idClient)
+                    JOIN Employee AS E ON (E._id=J.idEmployee)
+                    JOIN Type AS T ON (T.name=J.nameType);""");
 
             ResultSet rs = statement.executeQuery();
             Integer id;
@@ -517,7 +511,7 @@ public class FirstPageController {
                         Alert alert2 = new Alert(Alert.AlertType.ERROR);
                         alert2.setTitle("Inserimento non corretto!");
                         alert2.setHeaderText("Inserimento non corretto");
-                        alert2.setContentText("Hai sbagliato a scrivere il nome del tipo di lavoro");
+                        alert2.setContentText("Hai sbagliato a scrivere qualcosa");
                         alert2.showAndWait();
                     } else {
 
@@ -630,7 +624,8 @@ public class FirstPageController {
                         Alert alert2 = new Alert(Alert.AlertType.ERROR);
                         alert2.setTitle("Inserimento non corretto!");
                         alert2.setHeaderText("Inserimento non corretto");
-                        alert2.setContentText("Hai sbagliato a scrivere il nome del tipo di lavoro");
+                        alert2.setContentText("Non hai selezionato un lavoratore, se non ne sono presenti è perché " +
+                                "hanno effettuato un lavoro");
                         alert2.showAndWait();
                     } else {
                         Person newPerson = null;
@@ -700,7 +695,8 @@ public class FirstPageController {
                         Alert alert2 = new Alert(Alert.AlertType.ERROR);
                         alert2.setTitle("Inserimento non corretto!");
                         alert2.setHeaderText("Inserimento non corretto");
-                        alert2.setContentText("Hai sbagliato a scrivere il nome del tipo di lavoro");
+                        alert2.setContentText("Non hai selezionato un cliente, se non ne sono presenti è perché gli è" +
+                                " stata fatta una lavorazione");
                         alert2.showAndWait();
                     } else {
                         Person newPerson = null;
@@ -770,7 +766,8 @@ public class FirstPageController {
                         Alert alert2 = new Alert(Alert.AlertType.ERROR);
                         alert2.setTitle("Inserimento non corretto!");
                         alert2.setHeaderText("Inserimento non corretto");
-                        alert2.setContentText("Hai sbagliato a scrivere il nome del tipo di lavoro");
+                        alert2.setContentText("Non hai selezionato un lavoro, se non ne sono presenti è perché sono " +
+                                "stati effettuati ad un qualche cliente");
                         alert2.showAndWait();
                     } else {
                         TypeOfJob newType = null;
@@ -841,7 +838,7 @@ public class FirstPageController {
                         Alert alert2 = new Alert(Alert.AlertType.ERROR);
                         alert2.setTitle("Inserimento non corretto!");
                         alert2.setHeaderText("Inserimento non corretto");
-                        alert2.setContentText("Hai sbagliato a scrivere il nome del tipo di lavoro");
+                        alert2.setContentText("Non hai selezionato un lavoro");
                         alert2.showAndWait();
                     } else {
                         Job deleteJob = null;
@@ -883,6 +880,32 @@ public class FirstPageController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    void handleAbout(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("about.fxml"));
+            DialogPane view = loader.load();
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Delete Type");
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.setDialogPane(view);
+
+            // Show the dialog and wait until the user closes it
+            Optional<ButtonType> clickedButton = dialog.showAndWait();
+            while(true) {
+                if (clickedButton.orElse(ButtonType.CLOSE) == ButtonType.OK) {
+                    break;
+                } else {
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @FXML
     void handleQuit(ActionEvent event) {
         Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);

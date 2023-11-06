@@ -48,6 +48,7 @@ public class FirstPageController {
     private ObservableList<TypeOfJob> type;
 
     @FXML private TableView<Job> tableJob;
+    @FXML private TableColumn<Job, Integer> idJob;
     @FXML private TableColumn<Job, String> lastNameClientJob;
     @FXML private TableColumn<Job, String> firstNameClientJob;
     @FXML private TableColumn<Job, String> lastNameEmployeeJob;
@@ -78,6 +79,8 @@ public class FirstPageController {
         tableTypeOfJob.setItems(getTypeData());
 
         typeOfJob.setCellValueFactory(new PropertyValueFactory<>("nameType"));
+
+        idJob.setCellValueFactory(new PropertyValueFactory<>("idJob"));
         lastNameClientJob.setCellValueFactory(new PropertyValueFactory<>("lastNameClient"));
         firstNameClientJob.setCellValueFactory(new PropertyValueFactory<>("firstNameClient"));
         lastNameEmployeeJob.setCellValueFactory(new PropertyValueFactory<>("lastNameEmployee"));
@@ -200,7 +203,8 @@ public class FirstPageController {
                     FROM Job AS J
                     JOIN Client AS C ON (C._id=J.idClient)
                     JOIN Employee AS E ON (E._id=J.idEmployee)
-                    JOIN Type AS T ON (T.name=J.nameType);""");
+                    JOIN Type AS T ON (T.name=J.nameType)
+                    ORDER BY J._id;""");
 
             ResultSet rs = statement.executeQuery();
             Integer id;
@@ -880,7 +884,6 @@ public class FirstPageController {
             e.printStackTrace();
         }
     }
-
     @FXML
     void handleAbout(ActionEvent event) {
         try {
@@ -905,7 +908,6 @@ public class FirstPageController {
             throw new RuntimeException(e);
         }
     }
-
     @FXML
     void handleQuit(ActionEvent event) {
         Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);

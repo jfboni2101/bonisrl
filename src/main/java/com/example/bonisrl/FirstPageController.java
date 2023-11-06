@@ -694,6 +694,76 @@ public class FirstPageController {
         }
     }
 
+    @FXML
+    void handleDeleteType(ActionEvent event) {
+        try {
+            String name;
+
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("delete-type.fxml"));
+            DialogPane view = loader.load();
+            DeleteTypeController controller = loader.getController();
+
+            // Set an empty person into the controller
+            controller.setJob(new TypeOfJob());
+            while(true) {
+                // Create the dialog to delete an Employee
+                Dialog<ButtonType> dialog = new Dialog<>();
+                dialog.setTitle("Delete Type");
+                dialog.initModality(Modality.WINDOW_MODAL);
+                dialog.setDialogPane(view);
+
+                // Show the dialog and wait until the user closes it
+                Optional<ButtonType> clickedButton = dialog.showAndWait();
+                if (clickedButton.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+                    name = controller.getType().getName();
+                    //Control about the inserted variables
+                    if (name.equals("0")) {
+                        Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                        alert2.setTitle("Inserimento non corretto!");
+                        alert2.setHeaderText("Inserimento non corretto");
+                        alert2.setContentText("Hai sbagliato a scrivere il nome del tipo di lavoro");
+                        alert2.showAndWait();
+                    } else {
+                        TypeOfJob newType = null;
+                        for(TypeOfJob t : type) {
+                            if(t.getName().equals(name)) {
+                                newType = t;
+                                break;
+                            }
+                        }
+                        type.remove(newType);
+                        //Add the new Employee
+                        try {
+                            Class.forName(JDBC_Driver_MySQL);
+                            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
+                            PreparedStatement statement = c.prepareStatement("DELETE FROM Type\n" + "WHERE name = " +
+                                    "?;");
+                            statement.setString(1, name);
+                            statement.executeUpdate();
+                            break;
+                        } catch (SQLException e) {
+                            Alert alert3 = new Alert(Alert.AlertType.ERROR);
+                            alert3.setTitle("ERRORE!");
+                            alert3.setHeaderText("Errore SQL");
+                            alert3.setContentText("C'è stato un errore nell'SQL");
+                            alert3.showAndWait();
+                        } catch (ClassNotFoundException e) {
+                            Alert alert4 = new Alert(Alert.AlertType.ERROR);
+                            alert4.setTitle("ERRORE!");
+                            alert4.setHeaderText("Errore nella creazione Class.forName()");
+                            alert4.setContentText("C'è stato un errore nella creazione di Class.forName()");
+                            alert4.showAndWait();
+                        }
+                    }
+                } else {
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     void handleQuit(ActionEvent event) {

@@ -26,10 +26,12 @@ public class NewJobController {
 
     @FXML
     public void initialize() {
+        Connection c = null;
+        PreparedStatement statement = null;
         try {
             Class.forName(JDBC_Driver_MySQL);
-            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-            PreparedStatement statement = c.prepareStatement(   "SELECT C._id AS 'idClient',C.firstName AS 'firstName', C.lastName AS 'lastName'\n" +
+            c = DriverManager.getConnection(JDBC_URL_MySQL);
+            statement = c.prepareStatement(   "SELECT C._id AS 'idClient',C.firstName AS 'firstName', C.lastName AS 'lastName'\n" +
                     "FROM Client AS C;");
             ResultSet rs = statement.executeQuery();
             String string;
@@ -80,6 +82,16 @@ public class NewJobController {
             throw new RuntimeException(e);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }finally {
+            if (c != null) {
+                try {
+                    statement.close();
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
         }
     }
 

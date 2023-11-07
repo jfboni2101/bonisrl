@@ -44,14 +44,15 @@ public class LoginController {
         String username_text = usernameTextField.getText();
         String password_text = passwordTextField.getText();
         provaLabel.setText("INSERT USERNAME AND PASSWORD");
-
+        Connection c = null;
+        PreparedStatement statement = null;
         if(username_text.equals("") && password_text.equals("")) {
             provaLabel.setText("UNCORRECT LOGGED (username or password blank)");
         } else {
             try{
                 Class.forName(JDBC_Driver_MySQL);
-                Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-                PreparedStatement statement = c.prepareStatement("SELECT * FROM Users AS U WHERE BINARY U.username=? " +
+                c = DriverManager.getConnection(JDBC_URL_MySQL);
+                statement = c.prepareStatement("SELECT * FROM Users AS U WHERE BINARY U.username=? " +
                         "and BINARY U.password=?;");
                 statement.setString(1, username_text);
                 statement.setString(2, password_text);
@@ -113,6 +114,16 @@ public class LoginController {
                 throw new RuntimeException();
             } catch (SQLException e) {
                 throw new RuntimeException();
+            }finally {
+                if (c != null) {
+                    try {
+                        statement.close();
+                        c.close();
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
             }
         }
     }

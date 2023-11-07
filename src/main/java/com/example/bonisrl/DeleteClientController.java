@@ -22,11 +22,13 @@ public class DeleteClientController {
 
     @FXML
     public void initialize() {
+        Connection c = null;
+        PreparedStatement statement = null;
         try {
             Class.forName(JDBC_Driver_MySQL);
-            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
+            c = DriverManager.getConnection(JDBC_URL_MySQL);
 
-            PreparedStatement statement = c.prepareStatement(   "SELECT C._id AS 'idClient', C.lastName AS " +
+            statement = c.prepareStatement(   "SELECT C._id AS 'idClient', C.lastName AS " +
                     "'lastname', C.firstName AS 'firstname', C.birthday AS 'birthday'\n" + "FROM boni_srl.Client AS " +
                     "C\n" + "LEFT JOIN boni_srl.Job AS J ON C._id = J.idClient\n" + "WHERE J.idClient IS NULL;");
             ResultSet rs = statement.executeQuery();
@@ -50,6 +52,16 @@ public class DeleteClientController {
             throw new RuntimeException(e);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }finally {
+            if (c != null) {
+                try {
+                    statement.close();
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
         }
     }
 

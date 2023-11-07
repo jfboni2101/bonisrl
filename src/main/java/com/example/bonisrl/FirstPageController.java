@@ -124,11 +124,13 @@ public class FirstPageController {
      */
     public ObservableList<Person> getEmployeeData() {
         employee = FXCollections.observableArrayList();
+        Connection c = null;
+        PreparedStatement statement = null;
         try {
             //Instauriamo il collegamento con il database
             Class.forName(JDBC_Driver_MySQL);
-            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-            PreparedStatement statement = c.prepareStatement("SELECT E.* FROM Employee AS E");
+            c = DriverManager.getConnection(JDBC_URL_MySQL);
+            statement = c.prepareStatement("SELECT E.* FROM Employee AS E");
             //Eseguiamo la query
             ResultSet rs = statement.executeQuery();
             String firstname, lastname;
@@ -155,6 +157,16 @@ public class FirstPageController {
             alert4.setHeaderText("Errore nella creazione Class.forName()");
             alert4.setContentText("C'è stato un errore nella creazione di Class.forName()");
             alert4.showAndWait();
+        }finally {
+            if (c != null) {
+                try {
+                    statement.close();
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
         }
         //Ritorniamo employee
         return employee;
@@ -167,11 +179,13 @@ public class FirstPageController {
      */
     public ObservableList<Person> getClientsData() {
         client = FXCollections.observableArrayList();
+        Connection c = null;
+        PreparedStatement statement = null;
         try {
             //Instauriamo il collegamento con il database
             Class.forName(JDBC_Driver_MySQL);
-            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-            PreparedStatement statement = c.prepareStatement("SELECT C.* FROM Client AS C");
+            c = DriverManager.getConnection(JDBC_URL_MySQL);
+            statement = c.prepareStatement("SELECT C.* FROM Client AS C");
             //Eseguiamo la query
             ResultSet rs = statement.executeQuery();
             String firstname, lastname;
@@ -197,6 +211,16 @@ public class FirstPageController {
             alert4.setHeaderText("Errore nella creazione Class.forName()");
             alert4.setContentText("C'è stato un errore nella creazione di Class.forName()");
             alert4.showAndWait();
+        }finally {
+            if (c != null) {
+                try {
+                    statement.close();
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
         }
         //Ritorniamo client
         return client;
@@ -209,11 +233,13 @@ public class FirstPageController {
      */
     public ObservableList<TypeOfJob> getTypeData() {
         type = FXCollections.observableArrayList();
+        Connection c = null;
+        PreparedStatement statement = null;
         try {
             //Instauriamo il collegamento con il database
             Class.forName(JDBC_Driver_MySQL);
-            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-            PreparedStatement statement = c.prepareStatement("SELECT T.* FROM Type AS T");
+            c = DriverManager.getConnection(JDBC_URL_MySQL);
+            statement = c.prepareStatement("SELECT T.* FROM Type AS T");
             //Eseguiamo la query
             ResultSet rs = statement.executeQuery();
             String name;
@@ -236,6 +262,16 @@ public class FirstPageController {
             alert4.setHeaderText("Errore nella creazione Class.forName()");
             alert4.setContentText("C'è stato un errore nella creazione di Class.forName()");
             alert4.showAndWait();
+        }finally {
+            if (c != null) {
+                try {
+                    statement.close();
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
         }
         //Ritorniamo client
         return type;
@@ -248,12 +284,14 @@ public class FirstPageController {
      */
     public ObservableList<Job> getJobData() {
         job = FXCollections.observableArrayList();
+        Connection c = null;
+        PreparedStatement statement = null;
         try {
             //Instauriamo il collegamento con il database
             Class.forName(JDBC_Driver_MySQL);
-            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
+            c = DriverManager.getConnection(JDBC_URL_MySQL);
 
-            PreparedStatement statement = c.prepareStatement("""
+            statement = c.prepareStatement("""
                     SELECT J._id AS 'id', T.name AS 'name', C._id AS 'idClient',  C.lastName AS 'lastNameClient', C.firstName AS 'firstNameClient', E._id AS 'idEmployee', E.lastName AS 'lastNameEmployee', E.firstName AS 'firstNameEmployee', J.dateOfJob, J.hours,  J.size, J.address
                     FROM Job AS J
                     JOIN Client AS C ON (C._id=J.idClient)
@@ -304,6 +342,16 @@ public class FirstPageController {
             alert4.setHeaderText("Errore nella creazione Class.forName()");
             alert4.setContentText("C'è stato un errore nella creazione di Class.forName()");
             alert4.showAndWait();
+        }finally {
+            if (c != null) {
+                try {
+                    statement.close();
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
         }
         //Ritorniamo job
         return job;
@@ -317,6 +365,8 @@ public class FirstPageController {
      */
     @FXML
     void handleAddEmployee(ActionEvent event) {
+        Connection c = null;
+        PreparedStatement statement = null;
         try {
             String firstName, lastName;
             LocalDate birthday;
@@ -355,8 +405,8 @@ public class FirstPageController {
                         //Aggiungiamo il nuovo employee al database e all'ObersableList
                         try {
                             Class.forName(JDBC_Driver_MySQL);
-                            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-                            PreparedStatement statement = c.prepareStatement("INSERT INTO Employee (lastName, firstName, birthday) VALUES (?,?,?);");
+                            c = DriverManager.getConnection(JDBC_URL_MySQL);
+                            statement = c.prepareStatement("INSERT INTO Employee (lastName, firstName, birthday) VALUES (?,?,?);");
                             statement.setString(1, lastName);
                             statement.setString(2, firstName);
                             statement.setString(3, String.valueOf(birthday));
@@ -394,6 +444,16 @@ public class FirstPageController {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            if (c != null) {
+                try {
+                    statement.close();
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
         }
     }
 
@@ -405,6 +465,8 @@ public class FirstPageController {
      */
     @FXML
     void handleAddClient(ActionEvent event) {
+        Connection c = null;
+        PreparedStatement statement = null;
         try {
             String firstName, lastName;
             LocalDate birthday;
@@ -442,8 +504,8 @@ public class FirstPageController {
                         //Aggiungiamo il nuovo client al database e all'ObservableList
                         try {
                             Class.forName(JDBC_Driver_MySQL);
-                            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-                            PreparedStatement statement = c.prepareStatement("INSERT INTO Client (lastName, firstName, birthday) VALUES (?,?,?);");
+                            c = DriverManager.getConnection(JDBC_URL_MySQL);
+                            statement = c.prepareStatement("INSERT INTO Client (lastName, firstName, birthday) VALUES (?,?,?);");
                             statement.setString(1, lastName);
                             statement.setString(2, firstName);
                             statement.setString(3, String.valueOf(birthday));
@@ -483,6 +545,16 @@ public class FirstPageController {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            if (c != null) {
+                try {
+                    statement.close();
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
         }
     }
 
@@ -494,6 +566,8 @@ public class FirstPageController {
      */
     @FXML
     void handleAddType(ActionEvent event) {
+        Connection c = null;
+        PreparedStatement statement = null;
         try {
             String name, description;
             //Carichiamo la pagina per aggiungere un nuovo typeOfJob(add-type.fxml)
@@ -529,8 +603,8 @@ public class FirstPageController {
                         //Aggiungiamo il nuovo tipo di lavoro nel database e nell'ObservableList
                         try {
                             Class.forName(JDBC_Driver_MySQL);
-                            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-                            PreparedStatement statement = c.prepareStatement("INSERT INTO Type (name, description) VALUES (?,?);");
+                            c = DriverManager.getConnection(JDBC_URL_MySQL);
+                            statement = c.prepareStatement("INSERT INTO Type (name, description) VALUES (?,?);");
                             statement.setString(1, name);
                             statement.setString(2, description);
                             statement.executeUpdate();
@@ -555,6 +629,16 @@ public class FirstPageController {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            if (c != null) {
+                try {
+                    statement.close();
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
         }
     }
 
@@ -566,6 +650,8 @@ public class FirstPageController {
      */
     @FXML
     void handleAddJob(ActionEvent event) {
+        Connection c = null;
+        PreparedStatement statement = null;
         try {
             String name, address, nameEmployee, lastnameEmployee, nameClient, lastnameClient;
             Integer idJob, idClient, idEmployee;
@@ -608,8 +694,8 @@ public class FirstPageController {
                         //Aggiungiamo il nuovo lavoro nel database e nell'ObservableList
                         try {
                             Class.forName(JDBC_Driver_MySQL);
-                            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-                            PreparedStatement statement = c.prepareStatement(   "SELECT firstName AS 'firstName', " +
+                            c = DriverManager.getConnection(JDBC_URL_MySQL);
+                            statement = c.prepareStatement(   "SELECT firstName AS 'firstName', " +
                                     "lastName AS 'lastName'  FROM Employee " +
                                     "WHERE _id = ?");
                             statement.setString(1, String.valueOf(idEmployee));
@@ -684,6 +770,16 @@ public class FirstPageController {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            if (c != null) {
+                try {
+                    statement.close();
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
         }
     }
 
@@ -695,6 +791,8 @@ public class FirstPageController {
      */
     @FXML
     void handleDeleteEmployee(ActionEvent event) {
+        Connection c = null;
+        PreparedStatement statement = null;
         try {
             Integer id;
             //Carichiamo la pagina per eliminare un employee(delete-employee.fxml)
@@ -737,8 +835,8 @@ public class FirstPageController {
                         employee.remove(newPerson);
                         try {
                             Class.forName(JDBC_Driver_MySQL);
-                            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-                            PreparedStatement statement = c.prepareStatement("DELETE FROM Employee\n" + "WHERE _id = " +
+                            c = DriverManager.getConnection(JDBC_URL_MySQL);
+                            statement = c.prepareStatement("DELETE FROM Employee\n" + "WHERE _id = " +
                                     "?;");
                             statement.setString(1, String.valueOf(id));
                             statement.executeUpdate();
@@ -763,6 +861,16 @@ public class FirstPageController {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            if (c != null) {
+                try {
+                    statement.close();
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
         }
     }
 
@@ -774,6 +882,8 @@ public class FirstPageController {
      */
     @FXML
     void handleDeleteClient(ActionEvent event) {
+        Connection c = null;
+        PreparedStatement statement = null;
         try {
             Integer id;
             //Carichiamo la pagina per eliminare un client(delete-client.fxml)
@@ -815,8 +925,8 @@ public class FirstPageController {
                         client.remove(newPerson);
                         try {
                             Class.forName(JDBC_Driver_MySQL);
-                            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-                            PreparedStatement statement = c.prepareStatement("DELETE FROM Client\n" + "WHERE _id = " +
+                            c = DriverManager.getConnection(JDBC_URL_MySQL);
+                            statement = c.prepareStatement("DELETE FROM Client\n" + "WHERE _id = " +
                                     "?;");
                             statement.setString(1, String.valueOf(id));
                             statement.executeUpdate();
@@ -841,6 +951,16 @@ public class FirstPageController {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            if (c != null) {
+                try {
+                    statement.close();
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
         }
     }
 
@@ -852,6 +972,8 @@ public class FirstPageController {
      */
     @FXML
     void handleDeleteType(ActionEvent event) {
+        Connection c = null;
+        PreparedStatement statement = null;
         try {
             String name;
             //Carichiamo la pagina per eliminare un tipo di lavoro(delete-type.fxml)
@@ -893,8 +1015,8 @@ public class FirstPageController {
                         type.remove(newType);
                         try {
                             Class.forName(JDBC_Driver_MySQL);
-                            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-                            PreparedStatement statement = c.prepareStatement("DELETE FROM Type\n" + "WHERE name = " +
+                            c = DriverManager.getConnection(JDBC_URL_MySQL);
+                            statement = c.prepareStatement("DELETE FROM Type\n" + "WHERE name = " +
                                     "?;");
                             statement.setString(1, name);
                             statement.executeUpdate();
@@ -919,6 +1041,16 @@ public class FirstPageController {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            if (c != null) {
+                try {
+                    statement.close();
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
         }
     }
 
@@ -930,6 +1062,8 @@ public class FirstPageController {
      */
     @FXML
     void handleDeleteJob(ActionEvent event) {
+        Connection c = null;
+        PreparedStatement statement = null;
         try {
             Integer id;
             //Carichiamo la pagina per eliminare un lavoro(delete-job.fxml)
@@ -971,8 +1105,8 @@ public class FirstPageController {
                         job.remove(deleteJob);
                         try {
                             Class.forName(JDBC_Driver_MySQL);
-                            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
-                            PreparedStatement statement = c.prepareStatement("DELETE FROM Job\n" + "WHERE _id = " +
+                            c = DriverManager.getConnection(JDBC_URL_MySQL);
+                            statement = c.prepareStatement("DELETE FROM Job\n" + "WHERE _id = " +
                                     "?;");
                             statement.setString(1, String.valueOf(id));
                             statement.executeUpdate();
@@ -997,6 +1131,16 @@ public class FirstPageController {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            if (c != null) {
+                try {
+                    statement.close();
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
         }
     }
 

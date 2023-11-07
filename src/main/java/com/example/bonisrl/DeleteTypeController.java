@@ -22,11 +22,13 @@ public class DeleteTypeController {
 
     @FXML
     public void initialize() {
+        Connection c = null;
+        PreparedStatement statement = null;
         try {
             Class.forName(JDBC_Driver_MySQL);
-            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
+            c = DriverManager.getConnection(JDBC_URL_MySQL);
 
-            PreparedStatement statement = c.prepareStatement(   "\n" + "SELECT T.name AS 'name', T.description AS " +
+            statement = c.prepareStatement(   "\n" + "SELECT T.name AS 'name', T.description AS " +
                     "'description'\n" +
                     "FROM boni_srl.Type AS T\n" + "LEFT JOIN boni_srl.Job AS J ON T.name = J.nameType\n" + "WHERE J.idEmployee IS NULL;");
             ResultSet rs = statement.executeQuery();
@@ -46,6 +48,16 @@ public class DeleteTypeController {
             throw new RuntimeException(e);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }finally {
+            if (c != null) {
+                try {
+                    statement.close();
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
         }
     }
 

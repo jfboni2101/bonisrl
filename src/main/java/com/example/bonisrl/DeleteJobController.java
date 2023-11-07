@@ -21,11 +21,13 @@ public class DeleteJobController {
 
     @FXML
     public void initialize() {
+        Connection c = null;
+        PreparedStatement statement = null;
         try {
             Class.forName(JDBC_Driver_MySQL);
-            Connection c = DriverManager.getConnection(JDBC_URL_MySQL);
+            c = DriverManager.getConnection(JDBC_URL_MySQL);
 
-            PreparedStatement statement = c.prepareStatement(
+            statement = c.prepareStatement(
                     "SELECT J._id AS 'id', T.name AS 'type', C.lastName AS 'lastNameClient', C.firstName AS " +
                             "'firstNameClient', E.lastName AS 'lastNameEmployee', E.firstName AS 'firstNameEmployee'," +
                             " J.dateOfJob AS 'date', J.hours AS 'hour',  J.size AS 'size', J.address AS 'address'\n" +
@@ -67,6 +69,16 @@ public class DeleteJobController {
             throw new RuntimeException(e);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }finally {
+            if (c != null) {
+                try {
+                    statement.close();
+                    c.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
         }
     }
 

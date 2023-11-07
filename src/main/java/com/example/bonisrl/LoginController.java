@@ -14,11 +14,16 @@ import java.io.IOException;
 import java.util.TimeZone;
 import java.sql.*;
 
+//Pagina di login dell'applicazione, compare appena l'applicazione viene eseguita
+
 public class LoginController {
     @FXML private PasswordField passwordTextField;
     @FXML private TextField usernameTextField;
     @FXML private Label provaLabel;
 
+    /***
+     * Creiamo le variabili per il collegamento al database interno del computer
+     */
     public static final String JDBC_Driver_MySQL = "com.mysql.cj.jdbc.Driver";
     public static final String JDBC_URL_MySQL = "jdbc:mysql://localhost:3306/boni_srl?user=boniSrl&password" +
             "=Magamago2101!" + "&serverTimezone=" + TimeZone.getDefault().getID();
@@ -30,6 +35,11 @@ public class LoginController {
 
     }
 
+    /***
+     * Funzione chiamata una volta cliccato il bottone Login per controllare se i dati inseriti sono tra quelli
+     * contenuti nel database all'interno della tabella User.
+     *
+     */
     @FXML void handleLogin(ActionEvent event) {
         String username_text = usernameTextField.getText();
         String password_text = passwordTextField.getText();

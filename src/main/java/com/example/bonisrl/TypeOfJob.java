@@ -5,6 +5,9 @@ import javafx.beans.property.StringProperty;
 
 import java.util.Objects;
 
+/***
+ * Questa è la classe utilizzata per descrivere i tipi di lavoro possibili
+ */
 public class TypeOfJob {
 
     StringProperty name;

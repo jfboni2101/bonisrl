@@ -3,6 +3,9 @@ package com.example.bonisrl;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+/***
+ * Controller utilizzato per aggiungere nuovi tipi di lavoro possibili
+ */
 public class NewTypeController {
 
     @FXML private TextField nameTextField;

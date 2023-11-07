@@ -8,6 +8,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.TimeZone;
 
+/***
+ * Controller utilizzato per aggiungere nuovi lavori effettuati
+ */
 public class NewJobController {
     @FXML private ComboBox<String> typeComboBox;
     @FXML private ComboBox<String> clientComboBox;

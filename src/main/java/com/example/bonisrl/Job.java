@@ -9,6 +9,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
+/***
+ * Questa è la classe utilizzata per descrivere i lavori che vengono effettuati
+ */
 public class Job {
     ObjectProperty<Integer> idJob;
     StringProperty nameType;

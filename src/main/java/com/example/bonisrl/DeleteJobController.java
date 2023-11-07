@@ -6,6 +6,9 @@ import javafx.scene.control.ComboBox;
 import java.sql.*;
 import java.util.TimeZone;
 
+/***
+ * Questo è il controller per eliminare i job
+ */
 public class DeleteJobController {
     @FXML
     private ComboBox<String> selectComboBox;

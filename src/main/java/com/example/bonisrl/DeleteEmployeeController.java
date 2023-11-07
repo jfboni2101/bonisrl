@@ -4,9 +4,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.TimeZone;
 
+/***
+ * Questo è il controller per eliminare gli employee
+ */
 public class DeleteEmployeeController {
 
     @FXML

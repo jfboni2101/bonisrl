@@ -8,6 +8,9 @@ import javafx.beans.property.StringProperty;
 import java.time.LocalDate;
 import java.util.Objects;
 
+/***
+ * Questa è la classe utilizzata per descrivere gli employee e i client che vengono aggiunti o eliminate
+ */
 public class Person {
     ObjectProperty<Integer> idPerson;
     StringProperty lastName;

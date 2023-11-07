@@ -3,6 +3,9 @@ package com.example.bonisrl;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+/***
+ * Controller utilizzato per aggiungere employee e client
+ */
 public class NewPersonController {
 
     @FXML private TextField firstNameTextField;
